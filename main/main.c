@@ -4,7 +4,6 @@
 #include "bsp/input.h"
 #include "bsp/led.h"
 #include "bsp/power.h"
-#include "custom_certificates.h"
 #include "driver/gpio.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_types.h"
@@ -16,8 +15,6 @@
 #include "pax_text.h"
 #include "pax_types.h"
 #include "portmacro.h"
-#include "wifi_connection.h"
-#include "wifi_remote.h"
 
 // Constants
 static char const TAG[] = "main";
@@ -207,29 +204,8 @@ void app_main(void) {
     bsp_led_send();                  // Send data to the coprocessor
     bsp_led_set_mode(false);         // Take control over all LEDs by disabling automatic mode
 
-    // Start WiFi stack (if your app does not require WiFi or BLE you can remove this section)
-    pax_background(&fb, BLACK);
-    pax_draw_text(&fb, WHITE, pax_font_sky_mono, 16, 0, 0, "Connecting to radio...");
-    blit();
-
-    if (wifi_remote_initialize() == ESP_OK) {
-        display_message("Starting WiFi stack...");
-        wifi_connection_init_stack();  // Start the Espressif WiFi stack
-
-        display_message("Connecting to WiFi network...");
-
-        if (wifi_connect_try_all() == ESP_OK) {
-            display_message("Successfully connected to WiFi network");
-        } else {
-            display_message("Failed to connect to WiFi network");
-        }
-    } else {
-        bsp_power_set_radio_state(BSP_POWER_RADIO_STATE_OFF);
-        ESP_LOGE(TAG, "WiFi radio not responding, WiFi not available");
-        display_message("WiFi radio unavailable");
-    }
-
-    vTaskDelay(pdMS_TO_TICKS(500));
+    // This test app does not use WiFi or BLE, so keep the radio powered down
+    bsp_power_set_radio_state(BSP_POWER_RADIO_STATE_OFF);
 
     // Main section of the app
 
