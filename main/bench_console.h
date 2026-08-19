@@ -20,6 +20,7 @@ typedef enum {
     BENCH_CMD_DUMP_FB,     // stream one cell's rendered framebuffer (arg = cell id)
     BENCH_CMD_RENDER_DEMO, // draw a sample page to the real display
     BENCH_CMD_IDLE_TIMEOUT, // no command arrived in time; return to the launcher
+    BENCH_CMD_EXIT,         // hand the badge back to the launcher now
 } bench_cmd_t;
 
 // Invoked from the console task for every recognised command except PING.

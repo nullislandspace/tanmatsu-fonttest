@@ -4,6 +4,9 @@
 
 #include "bench_config.h"
 #include "bench_console.h"
+#include "bench_corpus.h"
+#include "bench_matrix.h"
+#include "bench_measure.h"
 #include "bench_report.h"
 #include "bsp/device.h"
 #include "esp_heap_caps.h"
@@ -12,6 +15,7 @@
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "pax_gfx.h"
 
 static char const TAG[] = "bench";
 
@@ -72,24 +76,8 @@ void* bench_tile_psram(void) {
 }
 
 unsigned bench_cell_count(void) {
-    // Filled in once the matrix exists.
-    return 0;
-}
-
-// Stream the scrub block to evict the previous cell's tile from L2, so every
-// cell starts from a comparable cache state and cell ordering stops mattering.
-static void scrub_cache(void) {
-    volatile uint32_t* p     = (volatile uint32_t*)s_scrub;
-    size_t             words = BENCH_SCRUB_BYTES / sizeof(uint32_t);
-    for (size_t i = 0; i < words; i++) {
-        p[i] = (uint32_t)i;
-    }
-    uint32_t sink = 0;
-    for (size_t i = 0; i < words; i++) {
-        sink += p[i];
-    }
-    // Keep the reads from being elided.
-    __asm__ __volatile__("" : : "r"(sink) : "memory");
+    bench_matrix_build();
+    return bench_matrix_count();
 }
 
 // Hand the badge back to the launcher, giving the USB FIFO time to drain first:
@@ -120,14 +108,52 @@ static void run_matrix(bool single_cell) {
 
     bench_console_suspend();
 
+    bench_matrix_build();
+    unsigned const total = bench_matrix_count();
+
     float cpu_mhz = bench_measure_cpu_mhz(50000);
-    bench_report_begin((uint16_t)bench_cell_count(), cpu_mhz, s_tile_int, s_tile_psram);
+    bench_report_begin((uint16_t)total, cpu_mhz, s_tile_int, s_tile_psram);
 
-    scrub_cache();
-    // Cells are measured here once the matrix lands.
-    (void)single_cell;
+    unsigned first     = single_cell ? bench_matrix_base_index() : 0;
+    unsigned last      = single_cell ? first : total - 1;
+    unsigned measured  = 0;
+    unsigned unstable  = 0;
 
-    bench_report_end((uint16_t)bench_cell_count(), esp_timer_get_time() - started, "ok");
+    for (unsigned i = first; i <= last; i++) {
+        bench_cell_t const* cell = bench_matrix_cell(i);
+        if (cell == NULL) {
+            continue;
+        }
+
+        bench_result_t result;
+        if (!bench_measure_cell(cell, s_tile_int, s_tile_psram, s_scrub, &result)) {
+            ESP_LOGE(TAG, "Cell %u (%s) could not be measured", i, cell->id);
+            continue;
+        }
+
+        bench_measure_report(i, cell, &result);
+        measured++;
+        if (result.flags != 0) {
+            unstable++;
+        }
+
+        ESP_LOGI(TAG, "[%u/%u] %-32s %8lu ns/iter  %6.2f ns/px  cv %.2f%%", i + 1, total, cell->id,
+                 (unsigned long)result.ns_per_iter, (double)result.ns_per_dest_px, (double)result.cv_pct);
+    }
+
+    // The renderer is left as PAX found it, so nothing after a run inherits an
+    // async engine it did not ask for.
+    pax_set_render_engine_default();
+
+    char const* status = "ok";
+    if (measured != (last - first + 1)) {
+        status = "incomplete";
+    } else if (unstable * 100 > measured * 5) {
+        // More than 5% of cells flagged: the run is not a trustworthy result.
+        status = "unstable";
+    }
+
+    bench_report_end((uint16_t)measured, esp_timer_get_time() - started, status);
 
     bench_console_resume();
     if (s_pm_lock != NULL) {
@@ -152,8 +178,21 @@ static void runner_task(void* arg) {
             case BENCH_CMD_RUN:     run_matrix(false); break;
             case BENCH_CMD_RUN_ONE: run_matrix(true); break;
 
+            case BENCH_CMD_LIST_CELLS:
+                bench_matrix_dump();
+                break;
+
+            case BENCH_CMD_DUMP_CORPUS:
+                bench_corpus_dump();
+                break;
+
             case BENCH_CMD_IDLE_TIMEOUT:
                 bench_report_emitf("END", "{\"t\":\"end\",\"cells\":0,\"status\":\"idle_timeout\"}");
+                return_to_launcher();
+                break;
+
+            case BENCH_CMD_EXIT:
+                bench_report_emitf("END", "{\"t\":\"end\",\"cells\":0,\"status\":\"exit_requested\"}");
                 return_to_launcher();
                 break;
 

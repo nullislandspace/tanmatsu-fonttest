@@ -39,6 +39,7 @@ static struct {
     {"DUMPCORPUS",  BENCH_CMD_DUMP_CORPUS},
     {"DUMPFB",      BENCH_CMD_DUMP_FB    },
     {"RENDERDEMO",  BENCH_CMD_RENDER_DEMO},
+    {"EXIT",        BENCH_CMD_EXIT       },
 };
 
 static void handle_line(char* line) {
@@ -69,7 +70,8 @@ static void handle_line(char* line) {
 
         // Stop advertising readiness once a run has been asked for: the banner
         // would otherwise interleave with result records.
-        if (COMMANDS[i].cmd == BENCH_CMD_RUN || COMMANDS[i].cmd == BENCH_CMD_RUN_ONE) {
+        if (COMMANDS[i].cmd == BENCH_CMD_RUN || COMMANDS[i].cmd == BENCH_CMD_RUN_ONE ||
+            COMMANDS[i].cmd == BENCH_CMD_EXIT) {
             s_run_started = true;
         }
 

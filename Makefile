@@ -118,8 +118,10 @@ install: build mode_badgelink
 	$(BADGELINK) --timeout $(APPFS_TIMEOUT) appfs upload $(APP_SLUG) "$(APP_TITLE)" $(APP_VERSION) $(BUILD)/application.bin
 	@echo "=== Installation complete ==="
 
+# Needs BadgeLink mode like install does: after an app has run and handed the
+# badge back, USB is in debug mode and `badgelink start` cannot reach it.
 .PHONY: run
-run:
+run: mode_badgelink
 	$(BADGELINK) start $(APP_SLUG)
 
 # Benchmark

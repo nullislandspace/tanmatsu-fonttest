@@ -95,24 +95,35 @@ def git_info(path):
     return {"git": head, "dirty": dirty}
 
 
-def open_port(url, retries, delay=2.0):
-    """Open the console, retrying while the device reboots and re-enumerates.
+def connect(url, retries, ready_timeout, delay=2.0):
+    """Open the console and wait for the app to answer, reconnecting as needed.
 
-    The badge resets between `make run` and this script, and the rfc2217 proxy
-    holds the underlying device open, so the first few attempts can legitimately
-    fail. Retrying here is what removes the need to guess a sleep duration.
+    The badge resets between `make run` and this script, and the proxy holds the
+    underlying device open. A connection can therefore be accepted and then
+    dropped mid-reboot, so opening the port is not proof of anything -- only a
+    PONG or READY record is. Retrying the whole open-and-handshake is what
+    removes the need to guess a sleep duration.
     """
     last = None
     for attempt in range(1, retries + 1):
+        port = None
         try:
             port = serial.serial_for_url(url, baudrate=115200, timeout=1, do_not_open=True)
             port.open()
-            return port
+            ready = wait_ready(port, min(ready_timeout, 15.0))
+            if ready is not None:
+                return port, ready
+            last = "no READY/PONG"
         except Exception as exc:  # noqa: BLE001 - pyserial raises several types
             last = exc
-            print(f"  connect attempt {attempt}/{retries} failed: {exc}", file=sys.stderr)
-            time.sleep(delay)
-    raise SystemExit(f"could not open {url}: {last}")
+        if port is not None:
+            try:
+                port.close()
+            except Exception:  # noqa: BLE001
+                pass
+        print(f"  connect attempt {attempt}/{retries}: {last}", file=sys.stderr)
+        time.sleep(delay)
+    return None, None
 
 
 def read_line(port, buffer):
@@ -141,7 +152,7 @@ def wait_ready(port, timeout):
             port.flush()
             last_ping = time.time()
 
-        line = read_line(port, buffer)
+        line = read_line(port, buffer)  # raises if the link drops; caller retries
         if line is None:
             continue
         match = RECORD.match(line)
@@ -193,13 +204,9 @@ def main():
     parser.add_argument("--allow-mismatch", action="store_true")
     args = parser.parse_args()
 
-    print(f"Connecting to {args.port} ...")
-    port = open_port(args.port, args.open_retries)
-
-    print("Waiting for the benchmark app to announce itself ...")
-    ready = wait_ready(port, args.ready_timeout)
-    if ready is None:
-        port.close()
+    print(f"Connecting to {args.port} and waiting for the app to announce itself ...")
+    port, ready = connect(args.port, args.open_retries, args.ready_timeout)
+    if port is None:
         print("No READY/PONG from the device. Is the benchmark app running?", file=sys.stderr)
         return EXIT_CONNECTION
     print(f"  ready: schema {ready.get('schema')}, {ready.get('cells')} cells, "

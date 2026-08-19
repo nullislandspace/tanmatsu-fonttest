@@ -61,6 +61,9 @@ idf_component_register(
 	SRCS
 		"main.c"
 		"bench_console.c"
+		"bench_corpus.c"
+		"bench_matrix.c"
+		"bench_measure.c"
 		"bench_report.c"
 		"bench_runner.c"
 	PRIV_REQUIRES
