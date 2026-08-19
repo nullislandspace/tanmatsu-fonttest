@@ -215,6 +215,44 @@ erase:
 monitor:
 	source "$(IDF_SOURCE)" && idf.py $(IDF_PARAMS) monitor -p $(PORT)
 
+# USB mode switching
+#
+# Ask the firmware (running in USB_DEBUG / flash-monitor mode) to switch its
+# USB into BadgeLink (USB_DEVICE) mode, by sending the token "BADGELINK\n" on
+# the USB-serial/JTAG peripheral. Requires firmware that listens for it -- the
+# Tanmatsu launcher does, in main/usb_debug_listener.c.
+#
+# PORT accepts either a local device path (e.g. /dev/ttyACM0) or an
+# rfc2217:// URL when the device is being forwarded over the network.
+.PHONY: mode_badgelink
+mode_badgelink:
+	source "$(IDF_SOURCE)" >/dev/null && \
+	python3 -c "import serial, sys; s=serial.serial_for_url('$(PORT)', timeout=1); s.write(b'BADGELINK\n'); s.flush(); sys.stdout.write(s.read(128).decode(errors='replace')); s.close()"
+
+# Ask the firmware (running in USB_DEVICE / BadgeLink mode) to switch its USB
+# back to flash/monitor (USB_DEBUG) mode via the BadgeLink `mode` command.
+# Prefers the badgelink checkout created by `make badgelink`; falls back to a
+# component copy. Uses BADGELINKPORT (defaults to PORT) for the connection:
+# host:port -> --tcp, plain path -> --port.
+BADGELINK_CLONE_SH   := badgelink/tools/badgelink.sh
+BADGELINK_LOCAL_SH   := components/badgeteam__badgelink/tools/badgelink.sh
+BADGELINK_MANAGED_SH := managed_components/badgeteam__badgelink/tools/badgelink.sh
+
+.PHONY: mode_debug
+mode_debug:
+	if [ -x "$(BADGELINK_CLONE_SH)" ]; then \
+		BL_SH="$(BADGELINK_CLONE_SH)"; \
+	elif [ -x "$(BADGELINK_LOCAL_SH)" ]; then \
+		BL_SH="$(BADGELINK_LOCAL_SH)"; \
+	elif [ -x "$(BADGELINK_MANAGED_SH)" ]; then \
+		BL_SH="$(BADGELINK_MANAGED_SH)"; \
+	else \
+		echo "badgelink.sh not found, run 'make badgelink' first"; \
+		exit 1; \
+	fi; \
+	echo "Using $$BL_SH"; \
+	"$$BL_SH" $(BADGELINK_CONN) mode debug
+
 .PHONY: openocd
 openocd:
 	source "$(IDF_SOURCE)" && idf.py $(IDF_PARAMS) openocd
