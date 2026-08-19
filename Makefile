@@ -5,10 +5,17 @@ BADGELINKPORT ?= $(PORT)
 
 # Build parameters
 IDF_VERSION ?= v6.0.2
-BUILD ?= build/$(DEVICE)
 FAT ?= 0
-SDKCONFIG_DEFAULTS ?= sdkconfigs/general;sdkconfigs/$(DEVICE)
-SDKCONFIG ?= sdkconfig_$(DEVICE)
+
+# Compiler optimization level, selected by an sdkconfig fragment: "os" (-Os,
+# matches the launcher, the primary benchmark series) or "og" (-Og, the control
+# series). Each level gets its own build directory and sdkconfig, so switching
+# between them needs no 'make clean' and both stay cached.
+OPT ?= os
+
+BUILD ?= build/$(DEVICE)-$(OPT)
+SDKCONFIG_DEFAULTS ?= sdkconfigs/general;sdkconfigs/$(DEVICE);sdkconfigs/opt-$(OPT)
+SDKCONFIG ?= sdkconfig_$(DEVICE)_$(OPT)
 
 # SDK
 IDF_PATH ?= $(shell cat .IDF_PATH 2>/dev/null || test -d `pwd`/esp-idf && echo `pwd`/esp-idf || echo '$(HOME)/.espressif/$(IDF_VERSION)/esp-idf')
@@ -75,32 +82,45 @@ APP_SLUG ?= at.cavac.fonttest
 APP_INSTALL_BASE_PATH ?= /int/apps/
 APP_INSTALL_PATH = $(APP_INSTALL_BASE_PATH)$(APP_SLUG)
 
-# Erasing an AppFS entry wipes flash sectors and can take several seconds, far
+# Title and version recorded in the AppFS entry, shown by `badgelink appfs list`.
+APP_TITLE ?= Fonttest
+APP_VERSION ?= 1
+
+# Writing an AppFS entry erases flash sectors and takes several seconds, far
 # longer than badgelink's 0.25s default request timeout.
-APPFS_DELETE_TIMEOUT ?= 15
+APPFS_TIMEOUT ?= 30
+
+# All badgelink calls go through the retry wrapper: a fresh connection
+# intermittently fails with "Invalid sync" when the TCP proxy still holds bytes
+# from a previous session, which would otherwise abort a whole install.
+BADGELINK := tools/badgelink_retry.sh $(BADGELINK_CONN)
 
 .PHONY: install
 install: build mode_badgelink
 	@echo "=== Installing application ==="
 	@echo "Creating directory $(APP_INSTALL_PATH)..."
-	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) fs mkdir $(APP_INSTALL_PATH) || true
+	$(BADGELINK) fs mkdir $(APP_INSTALL_PATH) || true
 	@echo "Uploading metadata.json..."
-	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) fs upload $(APP_INSTALL_PATH)/metadata.json ../../metadata/metadata.json
+	$(BADGELINK) fs upload $(APP_INSTALL_PATH)/metadata.json metadata/metadata.json
 	@echo "Uploading icon16.png..."
-	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) fs upload $(APP_INSTALL_PATH)/icon16.png ../../metadata/icon16.png
+	$(BADGELINK) fs upload $(APP_INSTALL_PATH)/icon16.png metadata/icon16.png
 	@echo "Uploading icon32.png..."
-	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) fs upload $(APP_INSTALL_PATH)/icon32.png ../../metadata/icon32.png
+	$(BADGELINK) fs upload $(APP_INSTALL_PATH)/icon32.png metadata/icon32.png
 	@echo "Uploading icon64.png..."
-	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) fs upload $(APP_INSTALL_PATH)/icon64.png ../../metadata/icon64.png
+	$(BADGELINK) fs upload $(APP_INSTALL_PATH)/icon64.png metadata/icon64.png
 	@echo "Uploading application.bin..."
-	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) fs upload $(APP_INSTALL_PATH)/application.bin ../../$(BUILD)/application.bin
-	@echo "Removing cached AppFS copy of $(APP_SLUG)..."
-	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) --timeout $(APPFS_DELETE_TIMEOUT) appfs delete $(APP_SLUG) || true
+	$(BADGELINK) fs upload $(APP_INSTALL_PATH)/application.bin $(BUILD)/application.bin
+	@echo "Updating AppFS copy of $(APP_SLUG)..."
+	@# `badgelink start` boots from AppFS, not from /int/apps, so the AppFS copy
+	@# is what actually runs. Overwrite it here rather than deleting it: deleting
+	@# would leave `make run` with nothing to start, and only relaunching from the
+	@# launcher menu by hand would re-cache it.
+	$(BADGELINK) --timeout $(APPFS_TIMEOUT) appfs upload $(APP_SLUG) "$(APP_TITLE)" $(APP_VERSION) $(BUILD)/application.bin
 	@echo "=== Installation complete ==="
 
 .PHONY: run
 run:
-	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) start $(APP_SLUG)
+	$(BADGELINK) start $(APP_SLUG)
 
 # Preparation
 

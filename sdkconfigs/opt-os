@@ -1,0 +1,4 @@
+# Size-optimized build (-Os). This matches the Tanmatsu launcher, and is the
+# primary series for the font-rendering benchmark: it is what ships, so it is
+# what an optimization has to actually improve.
+CONFIG_COMPILER_OPTIMIZATION_SIZE=y

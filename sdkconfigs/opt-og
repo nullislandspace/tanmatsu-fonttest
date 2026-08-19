@@ -1,0 +1,5 @@
+# Debug-optimized build (-Og). The control series for the font-rendering
+# benchmark: it inlines less, so it exaggerates exactly the call-boundary
+# overhead the analysis blames. Comparing against -Os shows how much of each
+# optimization survives the optimizer.
+CONFIG_COMPILER_OPTIMIZATION_DEBUG=y

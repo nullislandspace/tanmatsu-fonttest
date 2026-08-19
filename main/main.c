@@ -10,6 +10,9 @@
 #include "esp_log.h"
 #include "hal/lcd_types.h"
 #include "nvs_flash.h"
+#include "bench_console.h"
+#include "bench_report.h"
+#include "bench_runner.h"
 #include "pax_fonts.h"
 #include "pax_gfx.h"
 #include "pax_text.h"
@@ -89,6 +92,18 @@ void app_main(void) {
     res = bsp_device_initialize(&bsp_configuration);
     if (res != ESP_OK) {
         ESP_LOGE(TAG, "Failed to initialize BSP: %d", res);
+        return;
+    }
+
+    // Claim the benchmark tile buffers before anything else can fragment the
+    // internal heap. The internal tile is the tight one: only a few hundred KB
+    // are free and it needs 192 KB contiguous, so it has to be asked for first.
+    if (!bench_buffers_allocate()) {
+        // bench_buffers_allocate() has already emitted an ABORT record saying
+        // how much contiguous internal memory was actually available.
+        ESP_LOGE(TAG, "Benchmark buffer allocation failed, returning to launcher");
+        vTaskDelay(pdMS_TO_TICKS(300));
+        bsp_device_restart_to_launcher();
         return;
     }
 
@@ -204,8 +219,15 @@ void app_main(void) {
     bsp_led_send();                  // Send data to the coprocessor
     bsp_led_set_mode(false);         // Take control over all LEDs by disabling automatic mode
 
-    // This test app does not use WiFi or BLE, so keep the radio powered down
+    // This app never uses the network, so keep the C6 radio powered down: a
+    // running radio means coprocessor traffic and interrupts that would add
+    // variance to the measurements.
     bsp_power_set_radio_state(BSP_POWER_RADIO_STATE_OFF);
+
+    // Benchmark harness: the runner waits for a command, the console listener
+    // supplies it. Nothing is measured until the host asks for a run.
+    bench_runner_start();
+    bench_console_start(bench_runner_command, bench_cell_count());
 
     // Main section of the app
 
