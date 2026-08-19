@@ -122,6 +122,37 @@ install: build mode_badgelink
 run:
 	$(BADGELINK) start $(APP_SLUG)
 
+# Benchmark
+#
+# The client speaks to the debug console at $(PORT), not to BadgeLink: it waits
+# for the app to announce itself rather than trusting a fixed sleep, so it
+# tolerates the badge still rebooting or the serial proxy reconnecting.
+RESULTS_DIR   ?= results
+TESTRUN_LABEL ?=
+TESTRUN_ARGS  ?=
+
+.PHONY: testrun
+testrun:
+	python3 tools/testrun.py --port "$(PORT)" --out-dir "$(RESULTS_DIR)" \
+		$(if $(TESTRUN_LABEL),--label "$(TESTRUN_LABEL)") \
+		--baseline "$(RESULTS_DIR)/baseline-$(OPT).json" $(TESTRUN_ARGS)
+
+# Record the current run as the reference every later run is compared against.
+.PHONY: testbaseline
+testbaseline:
+	$(MAKE) testrun TESTRUN_LABEL=baseline TESTRUN_ARGS="--set-baseline"
+
+# One full cycle at the current OPT level: build, install, launch, measure.
+.PHONY: bench
+bench: build install run
+	$(MAKE) testrun
+
+# Both optimization levels, one after the other.
+.PHONY: benchboth
+benchboth:
+	$(MAKE) bench OPT=os
+	$(MAKE) bench OPT=og
+
 # Preparation
 
 .PHONY: prepare
