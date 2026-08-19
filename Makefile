@@ -71,12 +71,16 @@ badgelink:
 	git clone https://github.com/badgeteam/esp32-component-badgelink.git badgelink
 	cd badgelink/tools; ./install.sh
 
-APP_SLUG ?= com.example.template
+APP_SLUG ?= at.cavac.fonttest
 APP_INSTALL_BASE_PATH ?= /int/apps/
 APP_INSTALL_PATH = $(APP_INSTALL_BASE_PATH)$(APP_SLUG)
 
+# Erasing an AppFS entry wipes flash sectors and can take several seconds, far
+# longer than badgelink's 0.25s default request timeout.
+APPFS_DELETE_TIMEOUT ?= 15
+
 .PHONY: install
-install: build
+install: build mode_badgelink
 	@echo "=== Installing application ==="
 	@echo "Creating directory $(APP_INSTALL_PATH)..."
 	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) fs mkdir $(APP_INSTALL_PATH) || true
@@ -90,6 +94,8 @@ install: build
 	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) fs upload $(APP_INSTALL_PATH)/icon64.png ../../metadata/icon64.png
 	@echo "Uploading application.bin..."
 	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) fs upload $(APP_INSTALL_PATH)/application.bin ../../$(BUILD)/application.bin
+	@echo "Removing cached AppFS copy of $(APP_SLUG)..."
+	cd badgelink/tools; ./badgelink.sh $(BADGELINK_CONN) --timeout $(APPFS_DELETE_TIMEOUT) appfs delete $(APP_SLUG) || true
 	@echo "=== Installation complete ==="
 
 .PHONY: run
@@ -224,19 +230,50 @@ monitor:
 #
 # PORT accepts either a local device path (e.g. /dev/ttyACM0) or an
 # rfc2217:// URL when the device is being forwarded over the network.
-.PHONY: mode_badgelink
-mode_badgelink:
-	source "$(IDF_SOURCE)" >/dev/null && \
-	python3 -c "import serial, sys; s=serial.serial_for_url('$(PORT)', timeout=1); s.write(b'BADGELINK\n'); s.flush(); sys.stdout.write(s.read(128).decode(errors='replace')); s.close()"
-
-# Ask the firmware (running in USB_DEVICE / BadgeLink mode) to switch its USB
-# back to flash/monitor (USB_DEBUG) mode via the BadgeLink `mode` command.
+#
 # Prefers the badgelink checkout created by `make badgelink`; falls back to a
 # component copy. Uses BADGELINKPORT (defaults to PORT) for the connection:
 # host:port -> --tcp, plain path -> --port.
 BADGELINK_CLONE_SH   := badgelink/tools/badgelink.sh
 BADGELINK_LOCAL_SH   := components/badgeteam__badgelink/tools/badgelink.sh
 BADGELINK_MANAGED_SH := managed_components/badgeteam__badgelink/tools/badgelink.sh
+
+# How long (in seconds, one probe per second) to wait for the badge to show up
+# in BadgeLink mode after the switch was requested.
+BADGELINK_WAIT_TRIES ?= 15
+
+# mode_badgelink is idempotent: it first probes whether BadgeLink already
+# answers (badge is in USB_DEVICE mode) and does nothing in that case, so it
+# can be used as a prerequisite of other targets such as `install`.
+.PHONY: mode_badgelink
+mode_badgelink:
+	@BL_SH=""; \
+	for candidate in "$(BADGELINK_CLONE_SH)" "$(BADGELINK_LOCAL_SH)" "$(BADGELINK_MANAGED_SH)"; do \
+		if [ -x "$$candidate" ]; then BL_SH="$$candidate"; break; fi; \
+	done; \
+	if [ -z "$$BL_SH" ]; then \
+		echo "badgelink.sh not found, run 'make badgelink' first" >&2; \
+		exit 1; \
+	fi; \
+	if "$$BL_SH" $(BADGELINK_CONN) appfs list >/dev/null 2>&1; then \
+		echo "Badge is already in BadgeLink mode"; \
+		exit 0; \
+	fi; \
+	echo "Requesting switch to BadgeLink mode on $(PORT)..."; \
+	source "$(IDF_SOURCE)" >/dev/null && \
+	python3 -c "import serial, sys; s=serial.serial_for_url('$(PORT)', timeout=1); s.write(b'BADGELINK\n'); s.flush(); sys.stdout.write(s.read(128).decode(errors='replace')); s.close()" || true; \
+	for i in $$(seq 1 $(BADGELINK_WAIT_TRIES)); do \
+		if "$$BL_SH" $(BADGELINK_CONN) appfs list >/dev/null 2>&1; then \
+			echo "Badge is in BadgeLink mode"; \
+			exit 0; \
+		fi; \
+		sleep 1; \
+	done; \
+	echo "Timed out waiting for the badge to enter BadgeLink mode" >&2; \
+	exit 1
+
+# Ask the firmware (running in USB_DEVICE / BadgeLink mode) to switch its USB
+# back to flash/monitor (USB_DEBUG) mode via the BadgeLink `mode` command.
 
 .PHONY: mode_debug
 mode_debug:
