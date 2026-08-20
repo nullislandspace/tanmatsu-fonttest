@@ -153,8 +153,15 @@ def dump_fb(port, cell_id, timeout=60.0):
     return meta, pixels
 
 
-def capture_refs(port, cell_ids, out_dir, run_meta):
-    """Dump every named cell and write results/refs/<id>.png plus a manifest."""
+def capture_refs(port, cell_ids, out_dir, run_meta, expected=None):
+    """Dump every named cell and write results/refs/<id>.png plus a manifest.
+
+    `expected` maps cell id to the fb_hash that cell reported during a measured
+    run. Checking against it is not redundant with the dump's own hash: that one
+    only proves the bytes survived the wire, this one proves they came from the
+    cell that was asked for. It caught a truncated command argument that silently
+    dumped the base cell instead.
+    """
     refs_dir = os.path.join(out_dir, "refs")
     os.makedirs(refs_dir, exist_ok=True)
     manifest_path = os.path.join(refs_dir, "manifest.json")
@@ -170,6 +177,13 @@ def capture_refs(port, cell_ids, out_dir, run_meta):
             meta, pixels = dump_fb(port, cell_id)
         except Exception as exc:  # noqa: BLE001 - one bad cell must not lose the rest
             print(f"  [{index}/{len(cell_ids)}] {cell_id}: FAILED ({exc})", file=sys.stderr)
+            failures.append(cell_id)
+            continue
+
+        want = (expected or {}).get(cell_id)
+        if want is not None and want != meta["h"]:
+            print(f"  [{index}/{len(cell_ids)}] {cell_id}: WRONG CELL "
+                  f"(hash {meta['h']}, measured {want}) - not writing a reference", file=sys.stderr)
             failures.append(cell_id)
             continue
 
@@ -334,8 +348,8 @@ def run_benchmark(port, capture, run_timeout, line_timeout):
             return "abort"
 
 
-def reference_cell_ids(args):
-    """Cell ids to capture references for: the baseline's, else the newest run's."""
+def reference_source(args):
+    """The run whose cell list and hashes references are captured against."""
     candidates = []
     if args.baseline and os.path.exists(args.baseline):
         candidates.append(args.baseline)
@@ -348,10 +362,9 @@ def reference_cell_ids(args):
     for path in candidates:
         with open(path, encoding="utf-8") as handle:
             run = json.load(handle)
-        ids = [c["id"] for c in run.get("cells", [])]
-        if ids:
-            return ids
-    return []
+        if run.get("cells"):
+            return run
+    return None
 
 
 def main():
@@ -383,17 +396,22 @@ def main():
           f"opt {ready.get('opt')}, pax {ready.get('pax_git')}")
 
     if args.capture_refs:
+        source = reference_source(args)
         if args.cells:
             cell_ids = [c.strip() for c in args.cells.split(",") if c.strip()]
+        elif source is not None:
+            cell_ids = [c["id"] for c in source["cells"]]
         else:
-            cell_ids = reference_cell_ids(args)
+            cell_ids = []
         if not cell_ids:
             print("No cell list available. Capture a run first, or pass --cells.", file=sys.stderr)
             return EXIT_USAGE
+
+        expected = {c["id"]: c["h"] for c in source["cells"]} if source else {}
         print(f"Capturing {len(cell_ids)} reference framebuffers ...")
         # PONG carries the identity fields, which is enough to stamp the
         # manifest; a full BEGIN record only exists inside a run.
-        failures = capture_refs(port, cell_ids, args.out_dir, {"build": ready, "bench": ready})
+        failures = capture_refs(port, cell_ids, args.out_dir, {"build": ready, "bench": ready}, expected)
         try:
             port.close()
         except Exception:  # noqa: BLE001

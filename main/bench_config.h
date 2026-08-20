@@ -98,3 +98,8 @@
 #define BENCH_FLAG_CLIPPED      (1u << 2)
 #define BENCH_FLAG_SLOW_OUTLIER (1u << 3)
 #define BENCH_FLAG_SPREAD       (1u << 4)
+
+// Longest console command argument, which in practice is the longest cell id.
+// Sized against the console's own line buffer so an argument can never be
+// silently clipped between the two.
+#define BENCH_ARG_MAX 64

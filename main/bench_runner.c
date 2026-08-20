@@ -31,7 +31,11 @@ static bench_demo_fn        s_demo    = NULL;
 // Command handed from the console task to the driver task. Only one command is
 // ever in flight: the console stops advertising readiness once a run starts.
 static volatile bench_cmd_t s_pending     = BENCH_CMD_NONE;
-static char                 s_pending_arg[32];
+// Must hold the longest cell id in the matrix. 32 was one byte short of
+// "c565.shader.upright.psram.async2", and the truncated id then fell through to
+// the base cell -- which is how two reference framebuffers got captured from the
+// wrong cell without anything reporting a problem.
+static char                 s_pending_arg[BENCH_ARG_MAX];
 
 bool bench_buffers_allocate(void) {
     uint32_t const caps_int   = MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT | MALLOC_CAP_CACHE_ALIGNED;
@@ -253,9 +257,17 @@ static void runner_task(void* arg) {
             case BENCH_CMD_DUMP_FB: {
                 int index = bench_matrix_find(s_pending_arg);
                 if (index < 0) {
-                    unsigned first, last;
-                    parse_range(s_pending_arg, bench_matrix_count(), &first, &last);
-                    index = (int)first;
+                    // Only a plain number is an acceptable alternative to an id.
+                    // Anything else is a typo, and quietly dumping some other
+                    // cell would bless the wrong reference for good.
+                    char* end = NULL;
+                    long  n   = strtol(s_pending_arg, &end, 10);
+                    if (end == s_pending_arg || *end != '\0' || n < 0 || n >= (long)bench_matrix_count()) {
+                        ESP_LOGE(TAG, "DUMPFB: no such cell '%s'", s_pending_arg);
+                        bench_report_abort("dumpfb_unknown_cell", NULL);
+                        break;
+                    }
+                    index = (int)n;
                 }
                 bench_console_suspend();
                 bench_dump_fb((unsigned)index, s_tile_int, s_tile_psram);
