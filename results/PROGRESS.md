@@ -149,6 +149,7 @@ below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
 | `20260820-113129-Og-c3ad1df6` | `c3ad1df6f621` | Og | 71 | 0.8299 | 1.0027 | 0.6702 | 0.9959 | +0.10% | ok |
 | `20260820-115429-Os-793ed284` | `793ed284747e` | Os | 71 | 0.5844 | 1.0145 | 0.6579 | 0.2741 | +0.04% | ok |
 | `20260820-115822-Og-793ed284` | `793ed284747e` | Og | 71 | 0.5819 | 1.0045 | 0.6715 | 0.2628 | +0.11% | ok |
+| `20260820-121649-Os-9506b879` | `9506b879fffd` | Os | 71 | 0.5826 | 1.0180 | 0.6520 | 0.2742 | +0.09% | ok |
 <!-- /generated: results -->
 
 ## Cumulative result
@@ -182,6 +183,40 @@ synchronous one. It is not buying its 12% with a rendering shortcut.
 ## Optimization log
 
 One entry per pax commit on the `opt/text-rendering` branch.
+
+### `9506b8792e...` — hoist the buffer function pointers (R3) — **null result**
+
+`pax_renderer_soft.c`, `pax_renderer_softasync.c`. The plan's **R3**, predicted
+"broad, both blit paths, both formats". Isolated against the previous commit:
+
+| Group | Change | Predicted |
+|---|---|---|
+| overall | **-0.31%** | broad |
+| fast2 | -0.89% | |
+| fast1 | +0.35% | |
+| shader | +0.06% | |
+
+Every figure is inside the attribution floor. This is a null result, and it is
+recorded as one rather than being folded into the cumulative total.
+
+The disassembly check that §10 now requires says the change is *real* — the
+compiler had not already hoisted them. `pax_swr_blit_char_direct_set` went 518 →
+522 bytes and `pax_swr_blit_char_alpha_blend` 754 → 738. So four fewer loads per
+pixel genuinely happened and bought nothing measurable.
+
+**That is informative about what remains.** The loads were hitting L1 and cost
+almost nothing; what the loop actually pays for is the *indirect calls*
+themselves, which are still there — a call through `bset` costs the same as a
+call through `buf->setter`. The remaining per-pixel win in the blit path is
+therefore not in addressing the pointers more cheaply but in **not calling
+through them at all**: specialising the loop on the buffer's pixel format so the
+getter, setter and both converters inline. That is adjacent to R5 but arrived at
+from the opposite direction, and it now looks like the most promising remaining
+item for `fast1`.
+
+Kept rather than reverted: it matches the style `pax_swr_scaled_image` in the
+same file already uses, and it makes the hot function slightly smaller. But it
+is not a win and is not counted as one.
 
 ### `793ed284747e` — stop routing fixed-point conversions through `long double`
 

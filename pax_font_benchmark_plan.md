@@ -636,7 +636,10 @@ before they are attempted, and one turned out to be misfiled:
 - **R6 is effectively dead.** It was predicated on a large `UPRIGHT`/`ROT_CW`
   gap. Measured, that gap is ×1.021. There is nothing to collapse.
 - **R5's premise is weakened.** It targets format-specific merging, but 565 → 888
-  measured ×1.007, so format is not where the cost is.
+  measured ×1.007, so format is not where the cost is. Its *mechanism* —
+  format-specialised pixel access — is still the most promising remaining lever,
+  but for eliminating indirect calls rather than for exploiting format
+  differences. R3's null result is the evidence.
 - **R9 is bounded by the `-Og`/`-Os` control at 4.7% overall**, which is smaller
   than any of the three wins above. It cannot be a major lever.
 
@@ -644,7 +647,8 @@ before they are attempted, and one turned out to be misfiled:
 
 | # | Rec | Change | Where | Expected signal |
 |---|---|---|---|---|
-| 1 | **R3** | hoist `buf->getter/setter/buf2col/col2buf` into locals, mirroring `pax_swr_scaled_image` at `pax_renderer_soft.c:145-149` | `pax_swr_blit_char_impl` | broad, both blit paths. Now the main remaining per-pixel indirection, and `fast1` is untouched so far |
+| ~~1~~ | ~~**R3**~~ | hoist `buf->getter/setter/buf2col/col2buf` into locals | `pax_swr_blit_char_impl` | **done, null result: -0.31% overall.** Codegen did change, so the loads really were removed; they were hitting L1 and cost nothing. See below |
+| 1 | **R-inline** *(new)* | specialise the blit loop on the buffer's pixel format so getter/setter/buf2col/col2buf inline instead of being called | `pax_swr_blit_char_impl`, `pax_setters.c` | R3's null result points here: the cost is the indirect **calls**, not addressing the pointers. Absorbs R5's intent by a different route |
 | 2 | **R4** | strength-reduce `x/scale`, `y/scale` into counters | `pax_renderer_soft.c:530` | modest; largest at scale > 1. Also on the `fast1` loop |
 | 3 | **R7** | draw entry point that skips the discarded measure pass; share the measure between workers | `pax_text.c:502`, `pax_renderer_softasync.c:1322` | async cells and `align=CENTER`. R2 gave direct evidence: async cells gained a third less than sync ones, so per-pixel work is a smaller share of async's total |
 | 4 | **R8** | glyph/string cache in buffer-native format | `pax_text.c` | order-of-magnitude candidate; largest and riskiest, hence last |
