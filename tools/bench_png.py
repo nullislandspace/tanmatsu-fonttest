@@ -36,6 +36,49 @@ def write_png(path, width, height, rgb):
         handle.write(chunk(b"IEND", b""))
 
 
+def read_png(path):
+    """Read back a PNG this module wrote. Returns (width, height, rgb).
+
+    Only 8-bit RGB with filter type 0 is handled, which is exactly what
+    write_png produces. A reference re-saved by an image editor will land here
+    with some other filter and gets a clear error rather than silent nonsense.
+    """
+    with open(path, "rb") as handle:
+        data = handle.read()
+    if data[:8] != b"\x89PNG\r\n\x1a\n":
+        raise ValueError(f"{path}: not a PNG")
+
+    pos = 8
+    width = height = None
+    idat = bytearray()
+    while pos < len(data):
+        length = struct.unpack(">I", data[pos:pos + 4])[0]
+        tag = data[pos + 4:pos + 8]
+        body = data[pos + 8:pos + 8 + length]
+        pos += 12 + length
+        if tag == b"IHDR":
+            width, height, depth, colour = struct.unpack(">IIBB", body[:10])
+            if depth != 8 or colour != 2:
+                raise ValueError(f"{path}: expected 8-bit RGB, got depth {depth} colour {colour}")
+        elif tag == b"IDAT":
+            idat += body
+        elif tag == b"IEND":
+            break
+
+    if width is None:
+        raise ValueError(f"{path}: no IHDR")
+
+    raw = zlib.decompress(bytes(idat))
+    stride = width * 3
+    out = bytearray(stride * height)
+    for y in range(height):
+        start = y * (stride + 1)
+        if raw[start] != 0:
+            raise ValueError(f"{path}: scanline {y} uses filter {raw[start]}, only 0 is supported")
+        out[y * stride:(y + 1) * stride] = raw[start + 1:start + 1 + stride]
+    return width, height, bytes(out)
+
+
 def to_rgb(pixels, fmt, width, height):
     """Expand a PAX framebuffer into 8-bit RGB.
 

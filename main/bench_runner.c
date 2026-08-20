@@ -172,7 +172,11 @@ static void run_matrix(unsigned first, unsigned last, bool go_home) {
     }
 
     if (go_home) {
-        return_to_launcher();
+        // Not straight to the launcher: the host may need to dump the
+        // framebuffer of a cell whose hash changed, and once we reboot there is
+        // nothing left to ask. It sends EXIT when it is done; an unattended run
+        // just lets the window expire.
+        bench_console_grace(BENCH_GRACE_MS);
     }
 }
 

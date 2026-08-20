@@ -172,3 +172,9 @@ void bench_console_resume(void) {
         vTaskResume(s_task);
     }
 }
+
+void bench_console_grace(unsigned ms) {
+    s_idle_deadline = esp_timer_get_time() + (int64_t)ms * 1000;
+    s_run_started   = false;  // advertise readiness again, so the host can tell we are still here
+    bench_console_resume();
+}

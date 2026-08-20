@@ -38,3 +38,8 @@ void bench_console_start(bench_console_cb_t cb, unsigned cells);
 // timed region.
 void bench_console_suspend(void);
 void bench_console_resume(void);
+
+// Resume the listener and give the host `ms` to ask for something else before
+// the app hands the badge back. Any recognised command restarts the clock, so a
+// host that is mid-dump is never cut off.
+void bench_console_grace(unsigned ms);

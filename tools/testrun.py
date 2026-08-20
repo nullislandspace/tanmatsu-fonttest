@@ -210,6 +210,97 @@ def capture_refs(port, cell_ids, out_dir, run_meta, expected=None):
     return failures
 
 
+def load_manifest(out_dir):
+    path = os.path.join(out_dir, "refs", "manifest.json")
+    if not os.path.exists(path):
+        return {}, path
+    with open(path, encoding="utf-8") as handle:
+        return json.load(handle), path
+
+
+def check_correctness(port, cells, out_dir, runid):
+    """Compare every cell's framebuffer hash to its reference, and diff any that differ.
+
+    The hash gate alone only says something changed. This dumps the cells that
+    changed while the app is still alive in its post-run grace window, and writes
+    a three-panel PNG plus numbers -- differing pixel count, max channel delta,
+    bounding box -- because those numbers are what separates an acceptable
+    rounding change from a missing glyph.
+    """
+    manifest, _ = load_manifest(out_dir)
+    if not manifest:
+        return {"checked": 0, "note": "no references captured"}
+
+    changed = [c for c in cells if c["id"] in manifest and c["h"] != manifest[c["id"]]["hash"]]
+    result = {"checked": len([c for c in cells if c["id"] in manifest]),
+              "changed": len(changed), "cells": {}}
+    if not changed:
+        return result
+
+    diff_dir = os.path.join(out_dir, "diffs", runid)
+    os.makedirs(diff_dir, exist_ok=True)
+    print(f"  {len(changed)} framebuffer hashes changed; dumping and diffing ...")
+
+    for cell in changed:
+        cid = cell["id"]
+        entry = {"reference": manifest[cid]["hash"], "actual": cell["h"],
+                 "blessed": manifest[cid].get("blessed", [])}
+        try:
+            meta, pixels = dump_fb(port, cid)
+            actual = bench_png.to_rgb(pixels, meta["fmt"], meta["tile"], meta["tile"])
+            ref_path = os.path.join(out_dir, "refs", f"{cid}.png")
+            width, height, reference = bench_png.read_png(ref_path)
+            panel_w, panel_h, panels, verdict = bench_png.diff_panels(reference, actual, width, height)
+            out_path = os.path.join(diff_dir, f"{cid}.png")
+            bench_png.write_png(out_path, panel_w, panel_h, panels)
+            entry.update(verdict)
+            entry["diff"] = out_path
+            print(f"    {cid}: {verdict['pixels_differing']} px "
+                  f"({verdict['pct_differing']:.3f}%), max delta {verdict['max_channel_delta']}"
+                  f" -> {out_path}")
+        except Exception as exc:  # noqa: BLE001 - a failed diff must not hide the others
+            entry["error"] = str(exc)
+            print(f"    {cid}: diff failed ({exc})", file=sys.stderr)
+        result["cells"][cid] = entry
+
+    return result
+
+
+def bless(out_dir, cell_ids, reason, run):
+    """Accept a changed reference, recording who changed it and why.
+
+    Never automatic and never silent: the manifest keeps the whole history, so a
+    run whose 'correctness ok' rests on a re-blessed reference stays visibly
+    different from one that matched the original baseline.
+    """
+    manifest, path = load_manifest(out_dir)
+    cells = {c["id"]: c for c in run.get("cells", [])}
+    build = (run.get("meta", {}) or {}).get("build", {})
+
+    for cid in cell_ids:
+        if cid not in manifest:
+            print(f"  {cid}: no reference to bless", file=sys.stderr)
+            continue
+        if cid not in cells:
+            print(f"  {cid}: not in the supplied run", file=sys.stderr)
+            continue
+        history = manifest[cid].setdefault("blessed", [])
+        history.append({
+            "from": manifest[cid]["hash"],
+            "to": cells[cid]["h"],
+            "pax_git": build.get("pax_git"),
+            "reason": reason,
+            "at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        })
+        manifest[cid]["hash"] = cells[cid]["h"]
+        print(f"  blessed {cid}: {history[-1]['from']} -> {history[-1]['to']}")
+
+    with open(path, "w", encoding="utf-8") as handle:
+        json.dump(manifest, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+    print(f"  wrote {path} (references must be re-captured with --capture-refs)")
+
+
 def git_info(path):
     """Local git identity, for cross-checking what the firmware reported."""
 
@@ -382,10 +473,33 @@ def main():
     parser.add_argument("--capture-refs", action="store_true",
                         help="dump every cell's framebuffer to results/refs/ instead of running "
                              "the matrix; do this once, at baseline time")
+    parser.add_argument("--bless", default=None,
+                        help="comma-separated cell ids whose changed rendering is accepted; "
+                             "requires --reason and a run to take the new hashes from")
+    parser.add_argument("--reason", default=None, help="why a --bless is justified")
+    parser.add_argument("--run", default=None, help="run JSON for --bless (default: the newest)")
     parser.add_argument("--cells", default=None,
                         help="comma-separated cell ids for --capture-refs (default: every cell "
                              "in the baseline, or in the newest run)")
     args = parser.parse_args()
+
+    if args.bless:
+        if not args.reason:
+            print("--bless requires --reason.", file=sys.stderr)
+            return EXIT_USAGE
+        source = args.run
+        if source is None:
+            runs_dir = os.path.join(args.out_dir, "runs")
+            names = sorted(n for n in os.listdir(runs_dir) if n.endswith(".json")) \
+                if os.path.isdir(runs_dir) else []
+            if not names:
+                print("No run to take blessed hashes from; pass --run.", file=sys.stderr)
+                return EXIT_USAGE
+            source = os.path.join(runs_dir, names[-1])
+        with open(source, encoding="utf-8") as handle:
+            run = json.load(handle)
+        bless(args.out_dir, [c.strip() for c in args.bless.split(",") if c.strip()], args.reason, run)
+        return EXIT_OK
 
     print(f"Connecting to {args.port} and waiting for the app to announce itself ...")
     port, ready = connect(args.port, args.open_retries, args.ready_timeout)
@@ -424,6 +538,24 @@ def main():
     print("Running benchmark ...")
     capture = Capture()
     status = run_benchmark(port, capture, args.run_timeout, args.line_timeout)
+
+    # The app stays listening for a grace window after a run precisely so this
+    # can happen; once it reboots there is nothing left to dump.
+    correctness = None
+    run_cells = [record["data"] for record in capture.records if record["kind"] == "CELL"]
+    if status == "ok" and run_cells:
+        stamp_id = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d-%H%M%S")
+        try:
+            correctness = check_correctness(port, run_cells, args.out_dir, stamp_id)
+        except Exception as exc:  # noqa: BLE001
+            correctness = {"error": str(exc)}
+            print(f"  correctness check failed: {exc}", file=sys.stderr)
+        try:
+            port.write(b"EXIT\n")
+            port.flush()
+        except Exception:  # noqa: BLE001
+            pass
+
     try:
         port.close()
     except Exception:  # noqa: BLE001 - the device reboots out from under us
@@ -462,8 +594,9 @@ def main():
         and build.get("pax_git", "").startswith(local_pax["git"][:8])
     )
 
-    cells = [record["data"] for record in capture.records if record["kind"] == "CELL"]
+    cells = run_cells
     run = {
+        "correctness": correctness,
         "schema": meta.get("schema"),
         "runid": runid,
         "status": status,
@@ -503,6 +636,11 @@ def main():
         return EXIT_ABORT
     if status != "ok":
         return EXIT_CONNECTION
+
+    if correctness and correctness.get("changed"):
+        print(f"CORRECTNESS REGRESSION: {correctness['changed']} cells render differently "
+              f"than their references. See {os.path.join(args.out_dir, 'diffs')}.", file=sys.stderr)
+        return EXIT_CORRECTNESS
 
     if args.set_baseline:
         baseline_path = os.path.join(args.out_dir, f"baseline-{opt.lower()}.json")

@@ -103,3 +103,9 @@
 // Sized against the console's own line buffer so an argument can never be
 // silently clipped between the two.
 #define BENCH_ARG_MAX 64
+
+// How long the app keeps listening after a run finishes, before handing the
+// badge back. The host uses this window to dump the framebuffers of any cell
+// whose hash changed -- a diff is impossible once the app has rebooted -- and
+// then sends EXIT. An unattended run just waits this out.
+#define BENCH_GRACE_MS 20000
