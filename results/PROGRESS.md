@@ -143,6 +143,8 @@ below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
 | `20260820-103259-baseline-Og-964533a6` | `964533a6d894` | Og | 71 | 1.0000 | - | - | - | -0.14% | baseline |
 | `20260820-111843-Os-f18645c3` | `f18645c3ac7e` | Os | 71 | 0.9702 | 0.9961 | 0.9388 | 1.0006 | +0.04% | ok |
 | `20260820-112224-Og-f18645c3` | `f18645c3ac7e` | Og | 71 | 0.9791 | 1.0045 | 0.9535 | 0.9994 | +0.02% | ok |
+| `20260820-112745-Os-c3ad1df6` | `c3ad1df6f621` | Os | 71 | 0.8252 | 1.0123 | 0.6555 | 1.0034 | +0.07% | ok |
+| `20260820-113129-Og-c3ad1df6` | `c3ad1df6f621` | Og | 71 | 0.8299 | 1.0027 | 0.6702 | 0.9959 | +0.10% | ok |
 <!-- /generated: results -->
 
 ## Correctness references
@@ -161,6 +163,44 @@ synchronous one. It is not buying its 12% with a rendering shortcut.
 ## Optimization log
 
 One entry per pax commit on the `opt/text-rendering` branch.
+
+### `c3ad1df6f621` — skip transparent glyph pixels, short-circuit covered ones
+
+`pax_renderer_soft.c`, `pax_renderer_softasync.c`. The plan's **R1**. The blit did
+a full read, two colour conversions, a blend and a write for every pixel in a
+glyph's bounding box, including the ones the blend cannot change. Both cases are
+provable from `pax_col_merge_inlined()` rather than assumed: coefficient 0 makes
+the lerp return `base` exactly, and coefficient 255 makes it return the drawing
+colour, which is loop-invariant and now converted once before the loop.
+
+| Group | -Os | -Og | Predicted |
+|---|---|---|---|
+| overall | **-17.48%** | -17.01% | |
+| fast2 (alpha blend) | **-34.45%** | -32.98% | biggest |
+| fast1 (direct set) | +1.23% | +0.27% | nothing |
+| shader | +0.34% | -0.41% | nothing |
+
+Correctness: all 71 framebuffer hashes unchanged at both optimization levels.
+That was a prediction, not a hope — neither branch can alter output — so a
+mismatch would have meant the reasoning was wrong.
+
+Best cells hit **-48.7%**. In absolute terms `c888.fast2.upright.psram.sync`
+goes from 447.9 to 237.6 ns per destination pixel.
+
+**The `fast1` regression is layout, and it was worth proving rather than
+assuming.** `pax_swr_blit_char_impl` is constant-folded into two specialisations,
+so the direct-set path never sees the new branches — and extracting
+`.text.pax_swr_blit_char_direct_set` from the object files before and after gives
+518 bytes that are byte-for-byte identical. What changed is that the alpha-blend
+function grew from 0x2c2 to 0x2f2, shifting everything after it in flash and
+changing how the direct-set loop lands in cache on XIP.
+
+That is worth generalising: layout effects are **deterministic per binary, not
+statistical**. Every `fast1` sync cell moved by a consistent +2.5%, which looks
+exactly like a real regression and reproduces perfectly across runs. Only the
+disassembly settles it. The ~1.5% attribution floor stated above is the right
+magnitude, but the reason is not noise — it is that a rebuild deterministically
+relocates code.
 
 ### `f18645c3ac7e` — inline the per-pixel colour merge in the glyph blit loops
 
