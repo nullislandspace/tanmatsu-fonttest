@@ -15,6 +15,16 @@ measurements. Its own §9 admits it: the frame-time split was never measured, th
 `long double` conversion cost in the shader path was never confirmed, PSRAM stall
 contribution is excluded.
 
+> **Status note, added after the baseline and the first three optimizations.**
+> The harness is built, the repeatability gate passed, both baselines are
+> captured, and three changes are measured and pushed: text rendering is 1.7×
+> faster overall with byte-identical output. Measurement has already contradicted
+> parts of what follows, and where it has, the contradictions are marked inline
+> rather than edited away — §9's optimization table carries the corrections, and
+> `results/PROGRESS.md` carries the running record. The single largest finding was
+> not in the analysis's recommendation list at all: it was filed here as a
+> verification step (§9, step 17).
+
 This project turns the analysis into something measurable. It converts the fonttest
 app into an automated benchmark harness, captures a **solid baseline**, and only then
 optimizes — each optimization a separate commit in the pax checkout, benchmarked
@@ -602,21 +612,54 @@ captured from broken rendering would silently bless the bug forever.
 each gated on `fb_hash` being unchanged for all 71 cells (and on a pixel diff being
 inspected and explicitly blessed where it is not):
 
+**Done so far** (each a commit on `opt/text-rendering`, each bit-identical on all
+71 `fb_hash` values at both optimization levels; full detail in
+`results/PROGRESS.md`):
+
+| Rec | Change | Predicted | Measured (-Os) |
+|---|---|---|---|
+| **R2** | `pax_col_merge_inlined()` in the glyph blit loops | large on `fast2`, nothing on `fast1` | `fast2` **-6.1%**, `fast1` -0.4%, `shader` +0.1% — prediction exact |
+| **R1** | skip `value == 0`; hoisted store at full coverage | biggest on 2-bpp AA | `fast2` **-34.5%** (best cells -48.7%), overall -17.5% |
+| **step 17** | `fixpt_t` conversions via `long double` | shader cells only | `shader` **-72.6%**, overall **-41.6%** — the largest single win, and not shader-only |
+
+Cumulative: **1.7× faster overall**, `shader` 7,137.6 → 1,884.4 ns/dest px (3.8×),
+`fast2` 447.9 → 242.3 (1.8×), `fast1` unchanged.
+
+**What the measurements changed about this list.** Three items need rewriting
+before they are attempted, and one turned out to be misfiled:
+
+- **Step 17 was filed as a verification, not an optimization,** and scoped to the
+  shader path "by design". It is in fact the biggest win in the project so far,
+  and it is not shader-specific: `_to<T>()` backs `operator int()`, so every
+  rasteriser paid a 128-bit soft-float divide per pixel to read a coordinate. A
+  one-line `nm` check should have come *first*, before any code was written.
+- **R6 is effectively dead.** It was predicated on a large `UPRIGHT`/`ROT_CW`
+  gap. Measured, that gap is ×1.021. There is nothing to collapse.
+- **R5's premise is weakened.** It targets format-specific merging, but 565 → 888
+  measured ×1.007, so format is not where the cost is.
+- **R9 is bounded by the `-Og`/`-Os` control at 4.7% overall**, which is smaller
+  than any of the three wins above. It cannot be a major lever.
+
+**Remaining, reordered by evidence rather than by the original guess:**
+
 | # | Rec | Change | Where | Expected signal |
 |---|---|---|---|---|
-| 11 | **R2** | call `pax_col_merge_inlined()` (already `always_inline`, `pax_internal.h:417`) instead of `pax_col_merge()` | `pax_renderer_soft.c:545` | large on `fast2`, **nothing** on `fast1` — a perfect attribution check |
-| 12 | **R3** | hoist `buf->getter/setter/buf2col/col2buf` into locals, mirroring `pax_swr_scaled_image` at `pax_renderer_soft.c:145-149` | `pax_swr_blit_char_impl` | broad, both blit paths, both formats |
-| 13 | **R1** | early-out on `value == 0`; loop-hoisted `col2buf(color)` store at full coverage | `pax_swr_blit_char_impl` | biggest on 2-bpp AA; the primary customer of the §7.2 pixel diff |
-| 14 | **R4** | strength-reduce `x/scale`, `y/scale` into counters | `pax_renderer_soft.c:530` | modest; largest at scale > 1 (`sky@18/27`, `saira@36`) |
-| 15 | **R9** | `set_source_files_properties(... COMPILE_OPTIONS "-O2")` on the rasteriser TUs inside pax's own `core/CMakeLists.txt` | pax build | broad; also bounds how much of the gap is purely compiler-level |
-| 16 | **R6** | orientation-adaptive loop nesting — inner axis chosen by `abs(stride)==1` | `pax_swr_blit_char_impl` | must collapse the UPRIGHT/ROT_CW gap; largest on 888/PSRAM |
-| 17 | *(verify §6 of the analysis)* | `nm …/pax_dh_shaded.cpp.obj \| grep -E '__divtf3\|__floatditf\|__trunctfsf2'`; if present, fix the `fixpt_t`→`float` conversion | `pax_fixpt.hpp` | shader cells only — isolated by design |
-| 18 | **R5** | mask-aware range merger in the setter table, sibling to `pax_range_merger_888rgb/565rgb` | `pax_setters.c`, `pax_renderer_soft.c` | the structural fix; format-specialised, caller-blind |
-| 19 | **R7** | draw entry point that skips the discarded measure pass; share the measure between workers | `pax_text.c:502`, `pax_renderer_softasync.c:1322` | async cells and the `align=CENTER` cell |
-| 20 | **R8** | glyph/string cache in buffer-native format | `pax_text.c` | order-of-magnitude candidate; largest and riskiest, hence last |
+| 1 | **R3** | hoist `buf->getter/setter/buf2col/col2buf` into locals, mirroring `pax_swr_scaled_image` at `pax_renderer_soft.c:145-149` | `pax_swr_blit_char_impl` | broad, both blit paths. Now the main remaining per-pixel indirection, and `fast1` is untouched so far |
+| 2 | **R4** | strength-reduce `x/scale`, `y/scale` into counters | `pax_renderer_soft.c:530` | modest; largest at scale > 1. Also on the `fast1` loop |
+| 3 | **R7** | draw entry point that skips the discarded measure pass; share the measure between workers | `pax_text.c:502`, `pax_renderer_softasync.c:1322` | async cells and `align=CENTER`. R2 gave direct evidence: async cells gained a third less than sync ones, so per-pixel work is a smaller share of async's total |
+| 4 | **R8** | glyph/string cache in buffer-native format | `pax_text.c` | order-of-magnitude candidate; largest and riskiest, hence last |
+| 5 | **R9** | `-O2` on the rasteriser TUs in pax's `core/CMakeLists.txt` | pax build | bounded above by 4.7% |
+| — | **R5** | mask-aware range merger | `pax_setters.c` | premise weakened; revisit only if R3/R4 leave a format-dependent residue |
+| — | **R6** | orientation-adaptive loop nesting | `pax_swr_blit_char_impl` | **dropped**: the gap it targets is 2.1% |
 
-R10-R12 from the analysis are launcher-side and out of scope here — though R11's payoff
-is quantified directly by the `fast2` vs `shader` ratio.
+`fast1` is now the *slowest* of the three paths per destination pixel (363 vs 242
+for `fast2`), having been untouched by all three commits. R3 and R4 are the two
+items that address it, which is why they lead.
+
+R10-R12 from the analysis are launcher-side and out of scope here. R11's payoff
+was to be quantified by the `fast2` vs `shader` ratio; note that ratio has moved
+from 16× to 3.7×, so the case for avoiding fractional scales is much weaker than
+the baseline suggested.
 
 ---
 
@@ -633,6 +676,7 @@ is quantified directly by the `fast2` vs `shader` ratio.
 | **`ESP_LOG` interleaving into a result line** | single-`printf` of a pre-formatted line + per-record CRC32 + emitter mutex + listener suspended during the run; non-zero `corrupt_lines` invalidates the run |
 | **An optimization that renders wrongly looks like a huge win** | Two tiers (§7): `fb_hash` per cell on every run (mismatch = exit code 4), plus baseline reference framebuffers in `results/refs/` so any mismatch produces a real pixel diff with differing-pixel counts and max channel delta. Re-blessing a changed reference requires an explicit `--bless` with a reason and shows up in `PROGRESS.md` |
 | **A reference captured from already-broken rendering** blesses the bug permanently | References are captured at baseline, before any optimization, and spot-checked by eye at step 10; the `RENDERDEMO` token renders a sample page to the real display for a human look |
+| **Code relocation is mistaken for a regression** *(added after R1)* — a change that grows one function shifts every function after it in flash, altering how untouched code lands in cache under XIP. Under R1 this showed as a consistent +2.5% on every `fast1` sync cell, reproducing perfectly across runs | It is not statistical noise and no amount of sampling separates it. Extract the function's section from the object files before and after and compare bytes: under R1, `.text.pax_swr_blit_char_direct_set` was 518 bytes identical either side. Treat sub-2% moves on paths a change did not touch as unattributable until the disassembly says otherwise |
 | **Stale flash** — measuring a binary that predates the change | firmware-embedded git hashes forced fresh via `CMAKE_CONFIGURE_DEPENDS`; host cross-checks against local `git rev-parse` and warns; dirty trees flagged in the result and in `PROGRESS.md` |
 | **DSI panel** continuously streaming 1.15 MB from PSRAM | a *constant* background load, identical in every run, so it does not bias comparisons; recorded as `hw.dsi_active`; deliberately not disabled, since the launcher runs with it |
 | **`reps` differing between compared runs** changes cache behaviour subtly | normalise per iteration; scrub + warm-up per cell; host warns when matched cells differ >4× in `reps` |

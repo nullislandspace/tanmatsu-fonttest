@@ -26,7 +26,7 @@ prose and the status table are maintained by hand.
 | 8. Host tooling | done | `testrun.py` captures; `bench_report.py` compares, gates and regenerates this file |
 | 9. Repeatability gate | **passed** | three back-to-back runs, 71 cells: worst spread 0.47% against a 3% limit, median 0.06%, zero cells over limit |
 | 10. Baseline + reference framebuffers | done | `baseline-os.json` and `baseline-og.json`, both 71/71 at zero corrupt lines and zero flagged cells; 71 reference PNGs, every hash matching its measured cell, four spot-checked by eye; pax tagged `bench-baseline`, `opt/text-rendering` branched from it |
-| 11+. Optimizations | **ready to start** | everything a result needs to be attributable is in place |
+| 11+. Optimizations | in progress | 3 of 3 attempted landed, all bit-identical: R2, R1, and the `long double` fix. **1.7× faster overall.** See the optimization log below |
 
 ## Where the time goes
 
@@ -150,6 +150,21 @@ below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
 | `20260820-115429-Os-793ed284` | `793ed284747e` | Os | 71 | 0.5844 | 1.0145 | 0.6579 | 0.2741 | +0.04% | ok |
 | `20260820-115822-Og-793ed284` | `793ed284747e` | Og | 71 | 0.5819 | 1.0045 | 0.6715 | 0.2628 | +0.11% | ok |
 <!-- /generated: results -->
+
+## Cumulative result
+
+Against the baseline, at `-Os`, all bit-identical on every cell:
+
+| Path | Baseline ns/dest px | Now | Speedup |
+|---|---|---|---|
+| shader (fractional scale) | 7,137.6 | **1,884.4** | **3.8×** |
+| fast2 (antialiased, integer scale) | 447.9 | **242.3** | **1.8×** |
+| fast1 (1 bpp, opaque) | 360.1 | 363.4 | — |
+| **overall** | | | **1.7×** (-41.6%) |
+
+`fast1` is now the slowest of the three per destination pixel, having been
+untouched by all three changes. The next two items on the list, R3 and R4, are
+the ones that address it.
 
 ## Correctness references
 
