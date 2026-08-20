@@ -26,7 +26,7 @@ prose and the status table are maintained by hand.
 | 8. Host tooling | done | `testrun.py` captures; `bench_report.py` compares, gates and regenerates this file |
 | 9. Repeatability gate | **passed** | three back-to-back runs, 71 cells: worst spread 0.47% against a 3% limit, median 0.06%, zero cells over limit |
 | 10. Baseline + reference framebuffers | done | `baseline-os.json` and `baseline-og.json`, both 71/71 at zero corrupt lines and zero flagged cells; 71 reference PNGs, every hash matching its measured cell, four spot-checked by eye; pax tagged `bench-baseline`, `opt/text-rendering` branched from it |
-| 11+. Optimizations | in progress | 3 of 3 attempted landed, all bit-identical: R2, R1, and the `long double` fix. **1.7× faster overall.** See the optimization log below |
+| 11+. Optimizations | in progress | 5 attempted: **3 landed** (R2, R1, the `long double` fix), 1 null (R3), 1 reverted (R4). **1.7× faster overall**, all bit-identical. See the optimization log below |
 
 ## Where the time goes
 
@@ -153,6 +153,26 @@ below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
 | `20260820-122724-Os-f64f081a` | `f64f081afb4d` | Os | 71 | 0.6111 | 1.1075 | 0.6888 | 0.2739 | -0.15% | ok |
 | `20260820-123203-Os-6447745b` | `6447745bbf0c` | Os | 71 | 0.5819 | 1.0140 | 0.6522 | 0.2740 | +0.01% | ok |
 <!-- /generated: results -->
+
+## Where the code lives
+
+Results here reference pax commits by hash, and the pax checkout is gitignored
+in this repo, so the hashes have to resolve somewhere public or every number
+below is unverifiable by anyone else.
+
+| | |
+|---|---|
+| app | `nullislandspace/tanmatsu-fonttest`, branch `main` |
+| pax | `nullislandspace/pax-graphics`, branch `opt/text-rendering`, baseline tagged `bench-baseline` |
+| local pax checkout | `components/robotman2412__pax-gfx` (gitignored here — it is its own repo) |
+
+**The pax side is easy to forget, and was.** The first five optimization commits
+sat unpushed while the app repo was pushed four times; every result recorded in
+that window pointed at hashes that existed on one machine only. `make paxlog`
+now checks for this and puts a warning at the top of
+[`pax-commits.md`](pax-commits.md) when the pax branch has unpushed commits or no
+upstream at all — that file is generated on every cycle, so the warning lands
+where the results are read.
 
 ## Cumulative result
 

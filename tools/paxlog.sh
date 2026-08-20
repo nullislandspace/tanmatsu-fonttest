@@ -42,6 +42,29 @@ fi
 		echo
 	fi
 
+	# Results in this repo reference pax commits by hash. A hash that exists only
+	# on one machine makes every result here unverifiable by anyone else, and
+	# nothing else in the workflow notices, so check it explicitly.
+	branch=$(git -C "$PAX_DIR" rev-parse --abbrev-ref HEAD)
+	if upstream=$(git -C "$PAX_DIR" rev-parse --abbrev-ref "$branch@{upstream}" 2>/dev/null); then
+		unpushed=$(git -C "$PAX_DIR" rev-list --count "$upstream..$branch")
+		if [ "$unpushed" != "0" ]; then
+			echo "**$unpushed pax commit(s) are not pushed.** Results below reference"
+			echo "hashes that exist only on this machine. Run:"
+			echo '```'
+			echo "git -C $PAX_DIR push"
+			echo '```'
+			echo
+		fi
+	else
+		echo "**The pax branch \`$branch\` has no upstream.** Every hash below exists"
+		echo "only on this machine, so no result here can be verified elsewhere. Run:"
+		echo '```'
+		echo "git -C $PAX_DIR push -u origin $branch"
+		echo '```'
+		echo
+	fi
+
 	if [ "$range" = "-30" ]; then
 		commits=$(git -C "$PAX_DIR" log -30 --format=%H)
 	else
