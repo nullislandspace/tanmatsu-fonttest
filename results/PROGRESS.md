@@ -50,7 +50,9 @@ Four results from the first complete matrix, all of which change the priority
 order in the plan's §9 optimization table:
 
 - **The shader path costs 16× the alpha-blend path and 20× the direct-blit
-  path, per destination pixel.** A font drawn at a fractional scale does not get
+  path, per destination pixel.** _(As of the baseline. The `long double` fix
+  below cut it to 3.7×, and the cause turned out to be soft-float arithmetic
+  rather than anything intrinsic to shading.)_ A font drawn at a fractional scale does not get
   gradually slower, it falls off a cliff onto `pax_rect_shaded_resuv`. This is
   the single largest effect in the whole matrix and it dwarfs every
   micro-optimization in the plan's list.
@@ -145,6 +147,8 @@ below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
 | `20260820-112224-Og-f18645c3` | `f18645c3ac7e` | Og | 71 | 0.9791 | 1.0045 | 0.9535 | 0.9994 | +0.02% | ok |
 | `20260820-112745-Os-c3ad1df6` | `c3ad1df6f621` | Os | 71 | 0.8252 | 1.0123 | 0.6555 | 1.0034 | +0.07% | ok |
 | `20260820-113129-Og-c3ad1df6` | `c3ad1df6f621` | Og | 71 | 0.8299 | 1.0027 | 0.6702 | 0.9959 | +0.10% | ok |
+| `20260820-115429-Os-793ed284` | `793ed284747e` | Os | 71 | 0.5844 | 1.0145 | 0.6579 | 0.2741 | +0.04% | ok |
+| `20260820-115822-Og-793ed284` | `793ed284747e` | Og | 71 | 0.5819 | 1.0045 | 0.6715 | 0.2628 | +0.11% | ok |
 <!-- /generated: results -->
 
 ## Correctness references
@@ -163,6 +167,39 @@ synchronous one. It is not buying its 12% with a rendering shortcut.
 ## Optimization log
 
 One entry per pax commit on the `opt/text-rendering` branch.
+
+### `793ed284747e` — stop routing fixed-point conversions through `long double`
+
+`core/include/pax_fixpt.hpp`. The plan's **step 17**, which was written as a
+check to run rather than a change to make: `nm` on the shaded drawing helpers
+for `__divtf3` and friends. They were all there — `__floatsitf`,
+`__extendsftf2`, `__getf2`, `__multf3`, `__trunctfsf2`, `__fixtfsi`.
+
+| Group | -Os | -Og | Predicted |
+|---|---|---|---|
+| overall | **-41.56%** | -41.81% | |
+| shader | **-72.59%** | -73.72% | shader cells only |
+| fast2 (alpha blend) | -34.21% | -32.85% | (carried from R1) |
+| fast1 (direct set) | +1.45% | +0.45% | nothing |
+
+Correctness: all 71 framebuffer hashes unchanged at both levels. That was the
+load-bearing prediction here, since unlike R1 and R2 this change touches
+arithmetic. It holds because `long double` was never buying precision:
+`PAX_FIXPT_MUL` is 2^48, and dividing by a power of two only adjusts an
+exponent, so doing it in the destination type rounds exactly once in the same
+place. The range checks compared against `long double` limits that are exactly
+±2^15, which `int`, `float` and `double` all represent exactly.
+
+**The scope was wider than the plan assumed.** It describes this as a shader-path
+issue, but `_to<T>()` backs `operator int()` too — so a rasteriser was paying for
+a 128-bit soft-float divide per pixel merely to read out a coordinate. No 128-bit
+float symbol remains in any pax object.
+
+Shader path: **7,137.6 → 1,884.4 ns per destination pixel, a 3.8× speedup.** The
+single best cell is `font.saira@27.noaa` at -77.6%.
+
+`fast1` moves +1.45% here, the same deterministic relocation effect established
+under R1 and again not a semantic change.
 
 ### `c3ad1df6f621` — skip transparent glyph pixels, short-circuit covered ones
 
