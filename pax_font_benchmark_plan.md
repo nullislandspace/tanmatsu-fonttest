@@ -633,6 +633,14 @@ with the code being replaced — `objdump` for the instruction, `nm` for the
 libgcc call. That check is what found the biggest win here, and skipping it is
 what produced the only regression.
 
+**And a constraint the plan never accounted for.** The blit loop spills registers
+to the stack on every written pixel. That makes register pressure a first-class
+cost alongside instruction count, and it inverts the usual reading of a
+"cheaper" rewrite: R4 removed a division and still lost, because the two live
+variables it introduced cost more in spills than the division did. Any remaining
+change to this loop should be judged on whether it *reduces* the number of live
+values, not only on the arithmetic it saves.
+
 **What the measurements changed about this list.** Three items need rewriting
 before they are attempted, and one turned out to be misfiled:
 
@@ -656,8 +664,9 @@ before they are attempted, and one turned out to be misfiled:
 | # | Rec | Change | Where | Expected signal |
 |---|---|---|---|---|
 | ~~1~~ | ~~**R3**~~ | hoist `buf->getter/setter/buf2col/col2buf` into locals | `pax_swr_blit_char_impl` | **done, null result: -0.31% overall.** Codegen did change, so the loads really were removed; they were hitting L1 and cost nothing. See below |
-| 1 | **R-inline** *(new)* | specialise the blit loop on the buffer's pixel format so getter/setter/buf2col/col2buf inline instead of being called | `pax_swr_blit_char_impl`, `pax_setters.c` | R3's null result points here: the cost is the indirect **calls**, not addressing the pointers. Absorbs R5's intent by a different route |
-| ~~2~~ | ~~**R4**~~ | strength-reduce `x/scale`, `y/scale` into counters | `pax_renderer_soft.c:530` | **tried and reverted: +4.9% overall, +8.8% on `fast1`.** RV32IMAC has a hardware divider, so the divisions were single instructions and the counters cost more |
+| 1 | **R-rsdata** *(new)* | copy `pax_text_rsdata_t`'s fields into scalars before the loop | `pax_swr_blit_char_impl` | `rsdata` is a by-value struct parameter, so it lives on the stack and `rsdata.bpp` and `rsdata.bitmap` are reloaded on every pixel. Removes two loads and *reduces* register pressure — see the `fast1` disassembly in `results/PROGRESS.md` |
+| ~~2~~ | ~~**R-inline**~~ | specialise the blit loop on the buffer's pixel format so the accessors inline | `pax_swr_blit_char_impl`, `pax_setters.c` | **shelved.** Proposed after R3 on the theory that the indirect calls are the cost. It makes calls cheaper rather than removing work, which is the category that produced one small win, one null and one regression |
+| ~~—~~ | ~~**R4**~~ | strength-reduce `x/scale`, `y/scale` into counters | `pax_renderer_soft.c:530` | **tried and reverted: +4.9% overall, +8.8% on `fast1`.** Not because the hardware divider makes division free — because the loop already spills to stack, and two more live variables bought more spills than the division cost |
 | 3 | **R7** | draw entry point that skips the discarded measure pass; share the measure between workers | `pax_text.c:502`, `pax_renderer_softasync.c:1322` | async cells and `align=CENTER`. R2 gave direct evidence: async cells gained a third less than sync ones, so per-pixel work is a smaller share of async's total |
 | 4 | **R8** | glyph/string cache in buffer-native format | `pax_text.c` | order-of-magnitude candidate; largest and riskiest, hence last |
 | 5 | **R9** | `-O2` on the rasteriser TUs in pax's `core/CMakeLists.txt` | pax build | bounded above by 4.7% |

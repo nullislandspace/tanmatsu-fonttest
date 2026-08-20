@@ -189,6 +189,70 @@ Against the baseline, at `-Os`, all bit-identical on every cell:
 untouched by all three changes. The next two items on the list, R3 and R4, are
 the ones that address it.
 
+## Where `fast1`'s time goes
+
+`fast1` is untouched by every change so far and is now the slowest of the three
+paths per destination pixel (363 ns ≈ 131 cycles at 360 MHz). Before writing a
+fourth guess at it, here is the actual inner loop of
+`pax_swr_blit_char_direct_set`, 29 instructions:
+
+```
+156:  lw   a4,0(sp)        <- rsdata.bpp, reloaded from stack
+158:  div  a5,a7,s5        <- x / scale
+15c:  mul  a5,a5,a4
+160:  lw   a4,8(sp)        <- rsdata.bitmap, reloaded from stack
+162:  add  a5,a5,t1
+164:  srai a1,a5,0x3
+168:  add  a1,a1,a4
+16a:  lbu  a1,0(a1)
+16e:  andi a5,a5,7
+170:  sra  a5,a1,a5
+174:  and  a5,s3,a5
+178:  mul  a5,a5,s8
+17c:  slli a1,a5,0x10
+180:  bgez a1,19c          <- skip if value < 128
+184:  lw   a1,12(sp)       <- spills around
+186:  lw   a5,4(sp)           the indirect
+188:  sw   a6,28(sp)          setter call
+18a:  sw   a7,24(sp)
+192:  jalr a5
+```
+
+Two things this settles:
+
+- **`pax_text_rsdata_t rsdata` is a by-value struct parameter**, so it lives on
+  the stack and its fields are re-read on every pixel. `rsdata.bpp` and
+  `rsdata.bitmap` are two loads per pixel that exist only because the compiler
+  will not keep struct fields in registers across an indirect call.
+- **The loop is register-starved**, spilling and reloading around the setter
+  call on every pixel that gets written.
+
+**This corrects the explanation given for R4's failure above.** That entry
+attributes it to the hardware divider making the division cheap. The better
+reading is here: the loop was already spilling, and R4 added two more live
+variables (`sx`, `sx_rem`), so it bought more spills than the division cost. The
+binding constraint on this loop is register pressure, not arithmetic. The
+original entry is left as written, with this correction, because getting the
+right answer for the wrong reason is worth being able to see later.
+
+## What to do next
+
+In order, and with the reason each is ranked where it is:
+
+1. **Copy `rsdata`'s fields into scalars before the loop.** Removes two stack
+   loads per pixel and *reduces* register pressure instead of adding to it —
+   which is precisely where R4 went wrong. Same category as the two changes that
+   paid: it removes work rather than making work cheaper.
+2. **R7** — skip the measure pass `pax_draw_text_adv` discards. R2 supplied the
+   evidence: async cells gained a third less than sync ones, so per-pixel work is
+   a smaller share of async's total and the per-draw overhead is a larger one.
+3. **R8** — the glyph/string cache. Order-of-magnitude candidate, largest and
+   riskiest, genuinely last.
+
+**Not doing:** the format-specialised blit loop floated after R3. It makes calls
+cheaper rather than removing work, which is the category that has now produced
+one small win (R2), one null (R3) and one regression (R4).
+
 ## Correctness references
 
 `results/refs/` holds one PNG per cell, captured from the baseline firmware and
