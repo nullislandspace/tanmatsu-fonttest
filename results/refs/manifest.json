@@ -2,7 +2,7 @@
   "align.center": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:31.317206+00:00",
+    "captured_at": "2026-08-20T10:17:27.978065+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "4f91d280",
@@ -14,7 +14,7 @@
   "alpha.fast1.a128": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:25.814992+00:00",
+    "captured_at": "2026-08-20T10:17:22.963910+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "cc2eccc5",
@@ -26,7 +26,7 @@
   "alpha.fast2.a128": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:27.062705+00:00",
+    "captured_at": "2026-08-20T10:17:24.253400+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "012c199d",
@@ -38,7 +38,7 @@
   "c565.fast1.rotcw.psram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:18.517383+00:00",
+    "captured_at": "2026-08-20T10:16:13.386354+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "70d20c11",
@@ -50,7 +50,7 @@
   "c565.fast1.rotcw.psram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:17.659979+00:00",
+    "captured_at": "2026-08-20T10:16:12.574599+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "70d20c11",
@@ -62,7 +62,7 @@
   "c565.fast1.rotcw.sram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:20.422694+00:00",
+    "captured_at": "2026-08-20T10:16:15.093906+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "70d20c11",
@@ -74,7 +74,7 @@
   "c565.fast1.rotcw.sram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:19.557435+00:00",
+    "captured_at": "2026-08-20T10:16:14.195690+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "70d20c11",
@@ -86,7 +86,7 @@
   "c565.fast1.upright.psram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:15.115584+00:00",
+    "captured_at": "2026-08-20T10:16:10.118619+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "16b7abd1",
@@ -98,7 +98,7 @@
   "c565.fast1.upright.psram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:13.942638+00:00",
+    "captured_at": "2026-08-20T10:16:09.318166+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "16b7abd1",
@@ -110,7 +110,7 @@
   "c565.fast1.upright.sram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:16.841006+00:00",
+    "captured_at": "2026-08-20T10:16:11.729397+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "16b7abd1",
@@ -122,7 +122,7 @@
   "c565.fast1.upright.sram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:16.036773+00:00",
+    "captured_at": "2026-08-20T10:16:10.944506+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "16b7abd1",
@@ -134,7 +134,7 @@
   "c565.fast2.rotcw.psram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:25.917709+00:00",
+    "captured_at": "2026-08-20T10:16:20.638009+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "70889db9",
@@ -146,7 +146,7 @@
   "c565.fast2.rotcw.psram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:25.113913+00:00",
+    "captured_at": "2026-08-20T10:16:19.823514+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "70889db9",
@@ -158,7 +158,7 @@
   "c565.fast2.rotcw.sram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:27.578116+00:00",
+    "captured_at": "2026-08-20T10:16:22.753647+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "70889db9",
@@ -170,7 +170,7 @@
   "c565.fast2.rotcw.sram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:26.783370+00:00",
+    "captured_at": "2026-08-20T10:16:21.456930+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "70889db9",
@@ -182,7 +182,7 @@
   "c565.fast2.upright.psram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:22.057853+00:00",
+    "captured_at": "2026-08-20T10:16:17.483354+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "ecacce31",
@@ -194,7 +194,7 @@
   "c565.fast2.upright.psram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:21.284164+00:00",
+    "captured_at": "2026-08-20T10:16:15.939445+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "ecacce31",
@@ -206,7 +206,7 @@
   "c565.fast2.upright.sram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:23.566682+00:00",
+    "captured_at": "2026-08-20T10:16:19.050205+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "ecacce31",
@@ -218,7 +218,7 @@
   "c565.fast2.upright.sram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:22.781935+00:00",
+    "captured_at": "2026-08-20T10:16:18.251332+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "ecacce31",
@@ -230,7 +230,7 @@
   "c565.shader.rotcw.psram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:33.583794+00:00",
+    "captured_at": "2026-08-20T10:16:28.302681+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "796ae951",
@@ -242,7 +242,7 @@
   "c565.shader.rotcw.psram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:32.560772+00:00",
+    "captured_at": "2026-08-20T10:16:27.353692+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "796ae951",
@@ -254,7 +254,7 @@
   "c565.shader.rotcw.sram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:35.635724+00:00",
+    "captured_at": "2026-08-20T10:16:30.126905+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "796ae951",
@@ -266,7 +266,7 @@
   "c565.shader.rotcw.sram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:34.581390+00:00",
+    "captured_at": "2026-08-20T10:16:29.230552+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "796ae951",
@@ -277,20 +277,20 @@
   },
   "c565.shader.upright.psram.async2": {
     "blessed": [],
-    "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:29.683243+00:00",
+    "bytes": 131072,
+    "captured_at": "2026-08-20T10:16:24.663903+00:00",
     "corpus_ver": 1,
-    "fmt": "888",
-    "hash": "de65743c",
+    "fmt": "565",
+    "hash": "f8db19ed",
     "opt": "Os",
-    "orient": "rotcw",
+    "orient": "upright",
     "pax_git": "964533a6d894",
     "tile": 256
   },
   "c565.shader.upright.psram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:28.475274+00:00",
+    "captured_at": "2026-08-20T10:16:23.709238+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "f8db19ed",
@@ -302,7 +302,7 @@
   "c565.shader.upright.sram.async2": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:31.642145+00:00",
+    "captured_at": "2026-08-20T10:16:26.495434+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "f8db19ed",
@@ -314,7 +314,7 @@
   "c565.shader.upright.sram.sync": {
     "blessed": [],
     "bytes": 131072,
-    "captured_at": "2026-08-20T10:09:30.653384+00:00",
+    "captured_at": "2026-08-20T10:16:25.574939+00:00",
     "corpus_ver": 1,
     "fmt": "565",
     "hash": "f8db19ed",
@@ -326,7 +326,7 @@
   "c888.fast1.rotcw.psram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:42.748164+00:00",
+    "captured_at": "2026-08-20T10:16:37.122212+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "333c04c9",
@@ -338,7 +338,7 @@
   "c888.fast1.rotcw.psram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:41.627605+00:00",
+    "captured_at": "2026-08-20T10:16:35.973334+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "333c04c9",
@@ -350,7 +350,7 @@
   "c888.fast1.rotcw.sram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:45.002399+00:00",
+    "captured_at": "2026-08-20T10:16:39.410391+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "333c04c9",
@@ -362,7 +362,7 @@
   "c888.fast1.rotcw.sram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:43.875406+00:00",
+    "captured_at": "2026-08-20T10:16:38.301656+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "333c04c9",
@@ -374,7 +374,7 @@
   "c888.fast1.upright.psram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:38.208256+00:00",
+    "captured_at": "2026-08-20T10:16:32.327194+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "601bd481",
@@ -386,7 +386,7 @@
   "c888.fast1.upright.psram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:36.996488+00:00",
+    "captured_at": "2026-08-20T10:16:31.205905+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "601bd481",
@@ -398,7 +398,7 @@
   "c888.fast1.upright.sram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:40.505464+00:00",
+    "captured_at": "2026-08-20T10:16:34.694649+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "601bd481",
@@ -410,7 +410,7 @@
   "c888.fast1.upright.sram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:39.284587+00:00",
+    "captured_at": "2026-08-20T10:16:33.442982+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "601bd481",
@@ -422,7 +422,7 @@
   "c888.fast2.rotcw.psram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:52.418795+00:00",
+    "captured_at": "2026-08-20T10:16:47.129544+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "de65743c",
@@ -434,7 +434,7 @@
   "c888.fast2.rotcw.psram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:51.269828+00:00",
+    "captured_at": "2026-08-20T10:16:46.021427+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "de65743c",
@@ -446,7 +446,7 @@
   "c888.fast2.rotcw.sram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:54.606826+00:00",
+    "captured_at": "2026-08-20T10:16:49.325866+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "de65743c",
@@ -458,7 +458,7 @@
   "c888.fast2.rotcw.sram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:53.554024+00:00",
+    "captured_at": "2026-08-20T10:16:48.314233+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "de65743c",
@@ -470,7 +470,7 @@
   "c888.fast2.upright.psram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:47.914864+00:00",
+    "captured_at": "2026-08-20T10:16:41.660080+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "34ac5a26",
@@ -482,7 +482,7 @@
   "c888.fast2.upright.psram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:46.764018+00:00",
+    "captured_at": "2026-08-20T10:16:40.549727+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "34ac5a26",
@@ -494,7 +494,7 @@
   "c888.fast2.upright.sram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:50.136490+00:00",
+    "captured_at": "2026-08-20T10:16:44.889049+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "34ac5a26",
@@ -506,7 +506,7 @@
   "c888.fast2.upright.sram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:49.008205+00:00",
+    "captured_at": "2026-08-20T10:16:43.750358+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "34ac5a26",
@@ -518,7 +518,7 @@
   "c888.shader.rotcw.psram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:02.227776+00:00",
+    "captured_at": "2026-08-20T10:16:57.996376+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "dd1828a1",
@@ -530,7 +530,7 @@
   "c888.shader.rotcw.psram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:00.969606+00:00",
+    "captured_at": "2026-08-20T10:16:56.731963+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "dd1828a1",
@@ -542,7 +542,7 @@
   "c888.shader.rotcw.sram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:04.716297+00:00",
+    "captured_at": "2026-08-20T10:17:01.076815+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "dd1828a1",
@@ -554,7 +554,7 @@
   "c888.shader.rotcw.sram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:03.485100+00:00",
+    "captured_at": "2026-08-20T10:16:59.815102+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "dd1828a1",
@@ -566,19 +566,19 @@
   "c888.shader.upright.psram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:57.237536+00:00",
+    "captured_at": "2026-08-20T10:16:51.918871+00:00",
     "corpus_ver": 1,
     "fmt": "888",
-    "hash": "de65743c",
+    "hash": "839de335",
     "opt": "Os",
-    "orient": "rotcw",
+    "orient": "upright",
     "pax_git": "964533a6d894",
     "tile": 256
   },
   "c888.shader.upright.psram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:56.052092+00:00",
+    "captured_at": "2026-08-20T10:16:50.602836+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "839de335",
@@ -590,7 +590,7 @@
   "c888.shader.upright.sram.async2": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:59.765653+00:00",
+    "captured_at": "2026-08-20T10:16:55.409020+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "839de335",
@@ -602,7 +602,7 @@
   "c888.shader.upright.sram.sync": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:58.522323+00:00",
+    "captured_at": "2026-08-20T10:16:54.042068+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "839de335",
@@ -614,7 +614,7 @@
   "drift.first": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:09:12.739473+00:00",
+    "captured_at": "2026-08-20T10:16:08.471014+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "de65743c",
@@ -626,7 +626,7 @@
   "drift.last": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:32.418576+00:00",
+    "captured_at": "2026-08-20T10:17:29.380093+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "de65743c",
@@ -638,7 +638,7 @@
   "font.condensed@45": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:21.605559+00:00",
+    "captured_at": "2026-08-20T10:17:19.086291+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "7bcb728d",
@@ -650,7 +650,7 @@
   "font.marker@22": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:19.229801+00:00",
+    "captured_at": "2026-08-20T10:17:16.411703+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "59dd778c",
@@ -662,7 +662,7 @@
   "font.marker@33": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:20.563441+00:00",
+    "captured_at": "2026-08-20T10:17:17.897409+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "aed9f152",
@@ -674,7 +674,7 @@
   "font.saira@27.noaa": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:23.547832+00:00",
+    "captured_at": "2026-08-20T10:17:20.386674+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "9c31759b",
@@ -686,7 +686,7 @@
   "font.saira@36": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:17.965592+00:00",
+    "captured_at": "2026-08-20T10:17:15.211162+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "972d0991",
@@ -698,7 +698,7 @@
   "font.sky@13": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:16.379375+00:00",
+    "captured_at": "2026-08-20T10:17:13.592744+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "254ec85e",
@@ -710,7 +710,7 @@
   "font.sky@18": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:12.771358+00:00",
+    "captured_at": "2026-08-20T10:17:09.831280+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "a32b1e1d",
@@ -722,7 +722,7 @@
   "font.sky@27": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:13.901924+00:00",
+    "captured_at": "2026-08-20T10:17:11.031399+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "4bc0b3f9",
@@ -734,7 +734,7 @@
   "font.skymono@9": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:15.067516+00:00",
+    "captured_at": "2026-08-20T10:17:12.336641+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "6335b160",
@@ -746,7 +746,7 @@
   "len.long": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:30.205270+00:00",
+    "captured_at": "2026-08-20T10:17:26.773607+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "504a97ad",
@@ -758,7 +758,7 @@
   "len.short": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:29.106151+00:00",
+    "captured_at": "2026-08-20T10:17:25.525381+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "450061c8",
@@ -770,7 +770,7 @@
   "orient.fliph": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:08.157680+00:00",
+    "captured_at": "2026-08-20T10:17:04.813714+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "abc61a88",
@@ -782,7 +782,7 @@
   "orient.rotccw": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:05.797369+00:00",
+    "captured_at": "2026-08-20T10:17:02.254688+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "e16cec42",
@@ -794,7 +794,7 @@
   "orient.rotccwfliph": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:09.373035+00:00",
+    "captured_at": "2026-08-20T10:17:06.067611+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "5262d8d8",
@@ -806,7 +806,7 @@
   "orient.rotcwfliph": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:11.642604+00:00",
+    "captured_at": "2026-08-20T10:17:08.503407+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "0e714186",
@@ -818,7 +818,7 @@
   "orient.rothalf": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:06.993488+00:00",
+    "captured_at": "2026-08-20T10:17:03.413567+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "a6066584",
@@ -830,7 +830,7 @@
   "orient.rothalffliph": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:10.524727+00:00",
+    "captured_at": "2026-08-20T10:17:07.365273+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "418c2762",
@@ -842,7 +842,7 @@
   "rend.async1": {
     "blessed": [],
     "bytes": 196608,
-    "captured_at": "2026-08-20T10:10:24.639914+00:00",
+    "captured_at": "2026-08-20T10:17:21.662692+00:00",
     "corpus_ver": 1,
     "fmt": "888",
     "hash": "de65743c",

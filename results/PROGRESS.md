@@ -24,9 +24,9 @@ prose and the status table are maintained by hand.
 | 6. Timing loop | done | see step 7 |
 | 7. Full run | done | 71/71 cells, `status=ok`, `corrupt_lines=0`, 117.8 s wall, drift +0.10%, zero flagged cells, 360.00 MHz on every cell |
 | 8. Host tooling | done | `testrun.py` captures; `bench_report.py` compares, gates and regenerates this file |
-| 9. Repeatability gate | in progress | three back-to-back runs, `make testrepeat` |
-| 10. Baseline + reference framebuffers | not started | `DUMPFB` / `RENDERDEMO` not implemented yet |
-| 11+. Optimizations | not started | |
+| 9. Repeatability gate | **passed** | three back-to-back runs, 71 cells: worst spread 0.47% against a 3% limit, median 0.06%, zero cells over limit |
+| 10. Baseline + reference framebuffers | done | `results/baseline-os.json`, 71 reference PNGs in `results/refs/`, every hash matching its measured cell, four spot-checked by eye |
+| 11+. Optimizations | not started | pax `bench-baseline` tag and `opt/text-rendering` branch not created yet |
 
 ## Where the time goes
 
@@ -37,9 +37,9 @@ whether a change helped.
 <!-- generated: headline -->
 | Pixel loop | Cells | Median ns/dest px | Min | Max |
 |---|---|---|---|---|
-| fast1 | 16 | 359.9 | 190.9 | 398.5 |
-| fast2 | 16 | 448.1 | 308.7 | 477.4 |
-| shader | 16 | 7,143.6 | 3,758.4 | 7,571.7 |
+| fast1 | 16 | 362.4 | 195.6 | 399.3 |
+| fast2 | 16 | 449.4 | 309.3 | 471.8 |
+| shader | 16 | 7,161.9 | 3,756.8 | 7,641.0 |
 <!-- /generated: headline -->
 
 ## What the first full run says
@@ -82,6 +82,25 @@ and the base cell measured first and last differed by 0.10% — meaning cell
 ordering and thermal drift do not affect results, so per-cell comparison across
 runs is legitimate.
 
+## What counts as a real win
+
+Two noise floors, and they are an order of magnitude apart:
+
+- **Re-running the same binary**: 0.01% between runs, overall. The four runs on
+  the pre-fix binary in the table below land within a 0.01% band of each other.
+- **Rebuilding without changing behaviour**: up to **1.2%** on a group. The same
+  benchmark code, recompiled after an unrelated fix to a console argument
+  buffer, moved `fast1` by 1.2% and `fast2` by 0.4% in opposite directions. That
+  is code layout -- alignment, cache-set placement, branch offsets -- not
+  rendering.
+
+The second number is the one that matters. A claimed win under roughly 1.5% on a
+single group is not distinguishable from having relinked the binary, no matter
+how many samples back it. Real optimizations should be judged on the overall
+geometric mean, on moving the group they were predicted to move, and on
+*not* moving groups they should not touch -- R2 in the plan's table is a good
+example, since it must show up on `fast2` and be silent on `fast1`.
+
 ## Results
 
 One row per captured run. `Overall` and the per-group columns are geometric
@@ -91,10 +110,26 @@ below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
 <!-- generated: results -->
 | Run | pax commit | Opt | Cells | Overall | fast1 | fast2 | shader | Drift | Correct |
 |---|---|---|---|---|---|---|---|---|---|
-| `20260820-095455-Os-964533a6` | `964533a6d894` | Os | 71 | - | - | - | - | +0.10% | - |
-| `20260820-095933-repeat1-Os-964533a6` | `964533a6d894` | Os | 71 | - | - | - | - | +0.09% | - |
-| `20260820-100147-repeat2-Os-964533a6` | `964533a6d894` | Os | 71 | - | - | - | - | +0.07% | - |
+| `20260820-095455-Os-964533a6` | `964533a6d894` | Os | 71 | 0.9977 | 0.9883 | 1.0039 | 0.9965 | +0.10% | ok |
+| `20260820-095933-repeat1-Os-964533a6` | `964533a6d894` | Os | 71 | 0.9976 | 0.9882 | 1.0037 | 0.9965 | +0.09% | ok |
+| `20260820-100147-repeat2-Os-964533a6` | `964533a6d894` | Os | 71 | 0.9977 | 0.9883 | 1.0038 | 0.9966 | +0.07% | ok |
+| `20260820-100403-repeat3-Os-964533a6` | `964533a6d894` | Os | 71 | 0.9976 | 0.9884 | 1.0037 | 0.9965 | +0.04% | ok |
+| `20260820-100823-baseline-Os-964533a6` | `964533a6d894` | Os | 71 | 1.0001 | 1.0014 | 0.9994 | 0.9998 | -0.03% | ok |
+| `20260820-101549-baseline-Os-964533a6` | `964533a6d894` | Os | 71 | 1.0000 | - | - | - | -0.21% | baseline |
 <!-- /generated: results -->
+
+## Correctness references
+
+`results/refs/` holds one PNG per cell, captured from the baseline firmware and
+verified two ways: the streamed bytes hash to what the dump claimed, and that
+hash matches what the same cell reported during the measured run. The second
+check exists because the first one passed on two references that had been
+captured from the wrong cell entirely.
+
+A useful by-product: dumps are rendered through the synchronous engine while the
+measured hashes come from each cell's own renderer, so the match across all 71
+cells means the async multithreaded engine produces byte-identical output to the
+synchronous one. It is not buying its 12% with a rendering shortcut.
 
 ## Optimization log
 
