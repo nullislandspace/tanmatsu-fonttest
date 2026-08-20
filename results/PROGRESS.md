@@ -141,6 +141,8 @@ below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
 |---|---|---|---|---|---|---|---|---|---|
 | `20260820-102913-baseline-Os-964533a6` | `964533a6d894` | Os | 71 | 1.0000 | - | - | - | +0.10% | baseline |
 | `20260820-103259-baseline-Og-964533a6` | `964533a6d894` | Og | 71 | 1.0000 | - | - | - | -0.14% | baseline |
+| `20260820-111843-Os-f18645c3` | `f18645c3ac7e` | Os | 71 | 0.9702 | 0.9961 | 0.9388 | 1.0006 | +0.04% | ok |
+| `20260820-112224-Og-f18645c3` | `f18645c3ac7e` | Og | 71 | 0.9791 | 1.0045 | 0.9535 | 0.9994 | +0.02% | ok |
 <!-- /generated: results -->
 
 ## Correctness references
@@ -158,10 +160,48 @@ synchronous one. It is not buying its 12% with a rendering shortcut.
 
 ## Optimization log
 
-_One entry per pax commit on the `opt/text-rendering` branch: full hash,
-subject, files touched, measured geometric mean, and any cells that regressed._
+One entry per pax commit on the `opt/text-rendering` branch.
 
-_(none yet)_
+### `f18645c3ac7e` — inline the per-pixel colour merge in the glyph blit loops
+
+`core/src/renderer/pax_renderer_soft.c`, `core/src/renderer/pax_renderer_softasync.c`
+(one line each). The plan's **R2**. `pax_col_merge()` is an out-of-line function
+that does nothing but forward to `pax_col_merge_inlined()`, which is marked
+`always_inline` and used directly everywhere else in PAX. Both software renderers
+were calling the out-of-line version from the innermost per-pixel loop.
+
+| Group | -Os | -Og | Predicted |
+|---|---|---|---|
+| overall | **-2.98%** | -2.09% | |
+| fast2 (alpha blend) | **-6.12%** | -4.65% | large |
+| fast1 (direct set) | -0.39% | +0.45% | nothing |
+| shader | +0.06% | -0.06% | nothing |
+
+Correctness: all 71 framebuffer hashes unchanged, so rendering is bit-identical.
+
+This was chosen first as a test of the harness rather than for its size, and it
+passes that test cleanly. Only the alpha-blending branch of the loop was touched,
+and only the alpha-blending cells moved: the six best cells in the run are all
+`blit/alpha`, all at -10.4%, while every `blit/direct` and `shader` cell sits
+inside ±0.8% — below the rebuild noise floor, which is to say unchanged. A win
+that showed up everywhere would have meant the harness was measuring something
+other than what changed.
+
+The control series says something the percentages hide. `-Og` gains *less*
+(-4.65% against -6.12%), which is the opposite of the plan's expectation that a
+less-aggressive build would exaggerate call overhead. In absolute terms, on
+`c888.fast2.upright.psram.sync`, `-Os` saves 46.6 ns per destination pixel and
+`-Og` saves 33.4 -- so the call really was cheaper for `-Og` to make, and the
+larger relative figure at `-Os` comes from `-Os` also having the faster baseline
+to divide into. Relative and absolute disagree here, and the absolute number is
+the one describing the code.
+
+Two things worth carrying forward. The best cells gain 10.4% while the `fast2`
+group gains 6.1%, because the **async cells gain roughly a third less** than the
+sync ones (-2.68% vs -3.55% overall) — in the async engine the per-pixel loop is
+a smaller share of the total, which is itself evidence for R7. And a single
+removed function call per pixel is worth 10% of a glyph blit, which sets the
+scale for the remaining per-pixel work in R1, R3 and R4.
 
 ## Running a cycle
 
