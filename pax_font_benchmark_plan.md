@@ -625,6 +625,14 @@ inspected and explicitly blessed where it is not):
 Cumulative: **1.7× faster overall**, `shader` 7,137.6 → 1,884.4 ns/dest px (3.8×),
 `fast2` 447.9 → 242.3 (1.8×), `fast1` unchanged.
 
+**A rule these results suggest.** Every change that paid removed work outright
+(R1's skipped pixels, step 17's removed soft-float calls). Every change that
+merely made existing work cheaper either did nothing (R3) or backfired (R4).
+Before writing any of the remaining items, check what the machine actually does
+with the code being replaced — `objdump` for the instruction, `nm` for the
+libgcc call. That check is what found the biggest win here, and skipping it is
+what produced the only regression.
+
 **What the measurements changed about this list.** Three items need rewriting
 before they are attempted, and one turned out to be misfiled:
 
@@ -649,7 +657,7 @@ before they are attempted, and one turned out to be misfiled:
 |---|---|---|---|---|
 | ~~1~~ | ~~**R3**~~ | hoist `buf->getter/setter/buf2col/col2buf` into locals | `pax_swr_blit_char_impl` | **done, null result: -0.31% overall.** Codegen did change, so the loads really were removed; they were hitting L1 and cost nothing. See below |
 | 1 | **R-inline** *(new)* | specialise the blit loop on the buffer's pixel format so getter/setter/buf2col/col2buf inline instead of being called | `pax_swr_blit_char_impl`, `pax_setters.c` | R3's null result points here: the cost is the indirect **calls**, not addressing the pointers. Absorbs R5's intent by a different route |
-| 2 | **R4** | strength-reduce `x/scale`, `y/scale` into counters | `pax_renderer_soft.c:530` | modest; largest at scale > 1. Also on the `fast1` loop |
+| ~~2~~ | ~~**R4**~~ | strength-reduce `x/scale`, `y/scale` into counters | `pax_renderer_soft.c:530` | **tried and reverted: +4.9% overall, +8.8% on `fast1`.** RV32IMAC has a hardware divider, so the divisions were single instructions and the counters cost more |
 | 3 | **R7** | draw entry point that skips the discarded measure pass; share the measure between workers | `pax_text.c:502`, `pax_renderer_softasync.c:1322` | async cells and `align=CENTER`. R2 gave direct evidence: async cells gained a third less than sync ones, so per-pixel work is a smaller share of async's total |
 | 4 | **R8** | glyph/string cache in buffer-native format | `pax_text.c` | order-of-magnitude candidate; largest and riskiest, hence last |
 | 5 | **R9** | `-O2` on the rasteriser TUs in pax's `core/CMakeLists.txt` | pax build | bounded above by 4.7% |

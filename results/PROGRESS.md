@@ -150,6 +150,8 @@ below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
 | `20260820-115429-Os-793ed284` | `793ed284747e` | Os | 71 | 0.5844 | 1.0145 | 0.6579 | 0.2741 | +0.04% | ok |
 | `20260820-115822-Og-793ed284` | `793ed284747e` | Og | 71 | 0.5819 | 1.0045 | 0.6715 | 0.2628 | +0.11% | ok |
 | `20260820-121649-Os-9506b879` | `9506b879fffd` | Os | 71 | 0.5826 | 1.0180 | 0.6520 | 0.2742 | +0.09% | ok |
+| `20260820-122724-Os-f64f081a` | `f64f081afb4d` | Os | 71 | 0.6111 | 1.1075 | 0.6888 | 0.2739 | -0.15% | ok |
+| `20260820-123203-Os-6447745b` | `6447745bbf0c` | Os | 71 | 0.5819 | 1.0140 | 0.6522 | 0.2740 | +0.01% | ok |
 <!-- /generated: results -->
 
 ## Cumulative result
@@ -183,6 +185,36 @@ synchronous one. It is not buying its 12% with a rendering shortcut.
 ## Optimization log
 
 One entry per pax commit on the `opt/text-rendering` branch.
+
+### `f64f0810...` — strength-reduce `x/scale`, `y/scale` (R4) — **reverted**
+
+`pax_renderer_soft.c`, `pax_renderer_softasync.c`, reverted in `6447745`.
+Isolated against the previous commit:
+
+| Group | Change |
+|---|---|
+| overall | **+4.89%** |
+| fast1 | **+8.79%** |
+| fast2 | +5.64% |
+| shader | -0.11% |
+
+The premise was that two integer divisions per pixel had to be expensive. They
+are not. This target is RV32IMAC with a hardware divider, so `x / scale` is a
+single instruction the compiler schedules into the loop; `objdump | grep div`
+finds 15 of them in the blit object. Replacing that with a compare, a branch and
+two increments per pixel added more work than it removed, in the innermost loop,
+where the extra branch also costs prediction.
+
+**The reasoning was backwards, and it is worth naming how.** It argued from
+"division is slow" as a general principle rather than checking what this
+instruction set provides. One `objdump` would have settled it before the change
+was written — the same check that, run against `pax_dh_shaded.cpp.obj`, produced
+the largest win in the project. The tool was already in hand; it just was not
+pointed at this question first.
+
+A revert rather than a dropped commit, so the benchmark run recorded against
+`f64f0810` still refers to code that exists. The post-revert run confirms the
+restored state at -41.81% overall.
 
 ### `9506b8792e...` — hoist the buffer function pointers (R3) — **null result**
 
