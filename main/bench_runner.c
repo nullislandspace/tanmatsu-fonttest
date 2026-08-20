@@ -1,10 +1,12 @@
 #include "bench_runner.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 #include "bench_config.h"
 #include "bench_console.h"
 #include "bench_corpus.h"
+#include "bench_dump.h"
 #include "bench_matrix.h"
 #include "bench_measure.h"
 #include "bench_report.h"
@@ -24,6 +26,7 @@ static void*             s_tile_psram = NULL;
 static void*             s_scrub      = NULL;
 static TaskHandle_t      s_task       = NULL;
 static esp_pm_lock_handle_t s_pm_lock = NULL;
+static bench_demo_fn        s_demo    = NULL;
 
 // Command handed from the console task to the driver task. Only one command is
 // ever in flight: the console stops advertising readiness once a run starts.
@@ -90,7 +93,7 @@ static void return_to_launcher(void) {
     bsp_device_restart_to_launcher();
 }
 
-static void run_matrix(bool single_cell) {
+static void run_matrix(unsigned first, unsigned last, bool go_home) {
     int64_t started = esp_timer_get_time();
 
     // Hold the CPU at its nominal frequency for the whole run: DFS is enabled
@@ -114,8 +117,12 @@ static void run_matrix(bool single_cell) {
     float cpu_mhz = bench_measure_cpu_mhz(50000);
     bench_report_begin((uint16_t)total, cpu_mhz, s_tile_int, s_tile_psram);
 
-    unsigned first     = single_cell ? bench_matrix_base_index() : 0;
-    unsigned last      = single_cell ? first : total - 1;
+    if (last >= total) {
+        last = total - 1;
+    }
+    if (first > last) {
+        first = last;
+    }
     unsigned measured  = 0;
     unsigned unstable  = 0;
 
@@ -160,7 +167,38 @@ static void run_matrix(bool single_cell) {
         esp_pm_lock_release(s_pm_lock);
     }
 
-    return_to_launcher();
+    if (go_home) {
+        return_to_launcher();
+    }
+}
+
+// Parse "N" or "N-M" into an inclusive index range. An empty or unparseable
+// argument means the base cell, which is what BENCHRUN1 asks for.
+static void parse_range(char const* arg, unsigned total, unsigned* first, unsigned* last) {
+    *first = bench_matrix_base_index();
+    *last  = *first;
+    if (arg == NULL || arg[0] == '\0') {
+        return;
+    }
+
+    char*         end = NULL;
+    unsigned long a   = strtoul(arg, &end, 10);
+    if (end == arg) {
+        return;
+    }
+    unsigned long b = a;
+    if (*end == '-' && end[1] != '\0') {
+        b = strtoul(end + 1, NULL, 10);
+    }
+
+    if (a >= total) {
+        a = total - 1;
+    }
+    if (b >= total) {
+        b = total - 1;
+    }
+    *first = (unsigned)(a < b ? a : b);
+    *last  = (unsigned)(a < b ? b : a);
 }
 
 static void runner_task(void* arg) {
@@ -175,8 +213,22 @@ static void runner_task(void* arg) {
         s_pending       = BENCH_CMD_NONE;
 
         switch (cmd) {
-            case BENCH_CMD_RUN:     run_matrix(false); break;
-            case BENCH_CMD_RUN_ONE: run_matrix(true); break;
+            case BENCH_CMD_RUN: run_matrix(0, bench_matrix_count() - 1, true); break;
+
+            case BENCH_CMD_RUN_ONE: {
+                unsigned base = bench_matrix_base_index();
+                run_matrix(base, base, true);
+                break;
+            }
+
+            // Stays put afterwards, so a suspect cell can be re-run as often as
+            // it takes without reinstalling and relaunching between attempts.
+            case BENCH_CMD_RUN_CELL: {
+                unsigned first, last;
+                parse_range(s_pending_arg, bench_matrix_count(), &first, &last);
+                run_matrix(first, last, false);
+                break;
+            }
 
             case BENCH_CMD_LIST_CELLS:
                 bench_matrix_dump();
@@ -196,6 +248,32 @@ static void runner_task(void* arg) {
                 return_to_launcher();
                 break;
 
+            // Correctness tier 2: stream one cell's framebuffer for the host to
+            // turn into a reference PNG, or to diff against one.
+            case BENCH_CMD_DUMP_FB: {
+                int index = bench_matrix_find(s_pending_arg);
+                if (index < 0) {
+                    unsigned first, last;
+                    parse_range(s_pending_arg, bench_matrix_count(), &first, &last);
+                    index = (int)first;
+                }
+                bench_console_suspend();
+                bench_dump_fb((unsigned)index, s_tile_int, s_tile_psram);
+                bench_console_resume();
+                break;
+            }
+
+            // Not a measurement: a page of real text on the real panel, so a
+            // human can see at a glance that an optimization still renders
+            // something that looks like text.
+            case BENCH_CMD_RENDER_DEMO:
+                if (s_demo != NULL) {
+                    s_demo();
+                } else {
+                    ESP_LOGW(TAG, "No demo hook registered");
+                }
+                break;
+
             default:
                 ESP_LOGW(TAG, "Command %d not implemented yet", (int)cmd);
                 break;
@@ -205,6 +283,10 @@ static void runner_task(void* arg) {
 
 void bench_runner_start(void) {
     xTaskCreatePinnedToCore(runner_task, "bench", BENCH_TASK_STACK, NULL, BENCH_TASK_PRIO, &s_task, BENCH_TASK_CORE);
+}
+
+void bench_runner_set_demo(bench_demo_fn fn) {
+    s_demo = fn;
 }
 
 void bench_runner_command(bench_cmd_t cmd, char const* arg) {

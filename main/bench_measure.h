@@ -8,6 +8,7 @@
 #include "bench_config.h"
 #include "bench_corpus.h"
 #include "bench_matrix.h"
+#include "pax_gfx.h"
 
 typedef struct {
     uint16_t reps;       // iterations per sample, calibrated per cell
@@ -37,6 +38,13 @@ typedef struct {
     bench_layout_t layout;
     bench_path_t   path;
 } bench_result_t;
+
+// Render one cell exactly once onto a cleared tile, leaving `buf` initialised
+// and pointing at the result. This is the same deterministic single-iteration
+// pass the fb_hash canary uses, exposed so a framebuffer can be dumped and
+// diffed against a reference. The caller destroys `buf` when done.
+bool bench_render_cell_once(bench_cell_t const* cell, void* tile_internal, void* tile_psram, pax_buf_t* buf,
+                            bench_layout_t* layout);
 
 // Measure one cell. `scrub` points at the cache-scrub block. Returns false if
 // the cell could not be set up at all.

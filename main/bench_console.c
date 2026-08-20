@@ -35,6 +35,7 @@ static struct {
     {"PING",        BENCH_CMD_PING       },
     {"BENCHRUN",    BENCH_CMD_RUN        },
     {"BENCHRUN1",   BENCH_CMD_RUN_ONE    },
+    {"BENCHCELL",   BENCH_CMD_RUN_CELL   },
     {"LISTCELLS",   BENCH_CMD_LIST_CELLS },
     {"DUMPCORPUS",  BENCH_CMD_DUMP_CORPUS},
     {"DUMPFB",      BENCH_CMD_DUMP_FB    },
@@ -62,6 +63,10 @@ static void handle_line(char* line) {
         if (strcmp(line, COMMANDS[i].token) != 0) {
             continue;
         }
+
+        // Any recognised command counts as attention: push the idle deadline out
+        // again so an interactive debugging session is not cut short.
+        s_idle_deadline = esp_timer_get_time() + (int64_t)BENCH_IDLE_TIMEOUT_MS * 1000;
 
         if (COMMANDS[i].cmd == BENCH_CMD_PING) {
             bench_report_pong((uint16_t)s_cells, idle_left_s());

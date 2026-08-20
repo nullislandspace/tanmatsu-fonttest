@@ -1,0 +1,3426 @@
+{
+  "cells": [
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4724350,
+        "ns_px": 349.64
+      },
+      "g": "drift",
+      "h": "de65743c",
+      "i": 0,
+      "id": "drift.first",
+      "m": {
+        "max": 94654,
+        "mean": 94504.7,
+        "med": 94487,
+        "min": 94286,
+        "n": 15,
+        "reps": 20,
+        "sd": 100.8
+      },
+      "q": {
+        "cv": 0.11,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.39
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 1937066,
+        "ns_px": 191.13
+      },
+      "g": "cube",
+      "h": "16b7abd1",
+      "i": 1,
+      "id": "c565.fast1.upright.psram.sync",
+      "m": {
+        "max": 87243,
+        "mean": 87167.3,
+        "med": 87168,
+        "min": 87033,
+        "n": 15,
+        "reps": 45,
+        "sd": 56.7
+      },
+      "q": {
+        "cv": 0.07,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.24
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 3648857,
+        "ns_px": 360.03
+      },
+      "g": "cube",
+      "h": "16b7abd1",
+      "i": 2,
+      "id": "c565.fast1.upright.psram.async2",
+      "m": {
+        "max": 102356,
+        "mean": 102153.8,
+        "med": 102168,
+        "min": 101930,
+        "n": 15,
+        "reps": 28,
+        "sd": 141.8
+      },
+      "q": {
+        "cv": 0.14,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.42
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "sky",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 1935750,
+        "ns_px": 191.0
+      },
+      "g": "cube",
+      "h": "16b7abd1",
+      "i": 3,
+      "id": "c565.fast1.upright.sram.sync",
+      "m": {
+        "max": 100765,
+        "mean": 100665.9,
+        "med": 100659,
+        "min": 100579,
+        "n": 15,
+        "reps": 52,
+        "sd": 56.5
+      },
+      "q": {
+        "cv": 0.06,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.18
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "sky",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 3643000,
+        "ns_px": 359.45
+      },
+      "g": "cube",
+      "h": "16b7abd1",
+      "i": 4,
+      "id": "c565.fast1.upright.sram.async2",
+      "m": {
+        "max": 109505,
+        "mean": 109328.8,
+        "med": 109290,
+        "min": 109133,
+        "n": 15,
+        "reps": 30,
+        "sd": 109.2
+      },
+      "q": {
+        "cv": 0.1,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.34
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 1967256,
+        "ns_px": 194.11
+      },
+      "g": "cube",
+      "h": "70d20c11",
+      "i": 5,
+      "id": "c565.fast1.rotcw.psram.sync",
+      "m": {
+        "max": 76796,
+        "mean": 76692.1,
+        "med": 76723,
+        "min": 76539,
+        "n": 15,
+        "reps": 39,
+        "sd": 86.0
+      },
+      "q": {
+        "cv": 0.11,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.33
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 3756615,
+        "ns_px": 370.66
+      },
+      "g": "cube",
+      "h": "70d20c11",
+      "i": 6,
+      "id": "c565.fast1.rotcw.psram.async2",
+      "m": {
+        "max": 97816,
+        "mean": 97683.5,
+        "med": 97672,
+        "min": 97484,
+        "n": 15,
+        "reps": 26,
+        "sd": 90.0
+      },
+      "q": {
+        "cv": 0.09,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.34
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "sky",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 1957784,
+        "ns_px": 193.17
+      },
+      "g": "cube",
+      "h": "70d20c11",
+      "i": 7,
+      "id": "c565.fast1.rotcw.sram.sync",
+      "m": {
+        "max": 100152,
+        "mean": 99846.3,
+        "med": 99847,
+        "min": 99619,
+        "n": 15,
+        "reps": 51,
+        "sd": 162.6
+      },
+      "q": {
+        "cv": 0.16,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.53
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "sky",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 3739833,
+        "ns_px": 369.0
+      },
+      "g": "cube",
+      "h": "70d20c11",
+      "i": 8,
+      "id": "c565.fast1.rotcw.sram.async2",
+      "m": {
+        "max": 112439,
+        "mean": 112214.3,
+        "med": 112195,
+        "min": 111925,
+        "n": 15,
+        "reps": 30,
+        "sd": 133.5
+      },
+      "q": {
+        "cv": 0.12,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.46
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 6383437,
+        "ns_px": 472.43
+      },
+      "g": "cube",
+      "h": "ecacce31",
+      "i": 9,
+      "id": "c565.fast2.upright.psram.sync",
+      "m": {
+        "max": 102205,
+        "mean": 102140.1,
+        "med": 102135,
+        "min": 102121,
+        "n": 15,
+        "reps": 16,
+        "sd": 19.9
+      },
+      "q": {
+        "cv": 0.02,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.08
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4316727,
+        "ns_px": 319.47
+      },
+      "g": "cube",
+      "h": "ecacce31",
+      "i": 10,
+      "id": "c565.fast2.upright.psram.async2",
+      "m": {
+        "max": 95060,
+        "mean": 94979.1,
+        "med": 94968,
+        "min": 94902,
+        "n": 15,
+        "reps": 22,
+        "sd": 39.6
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.17
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 6385058,
+        "ns_px": 472.55
+      },
+      "g": "cube",
+      "h": "ecacce31",
+      "i": 11,
+      "id": "c565.fast2.upright.sram.sync",
+      "m": {
+        "max": 108586,
+        "mean": 108549.0,
+        "med": 108546,
+        "min": 108533,
+        "n": 15,
+        "reps": 17,
+        "sd": 12.1
+      },
+      "q": {
+        "cv": 0.01,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.05
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4317875,
+        "ns_px": 319.56
+      },
+      "g": "cube",
+      "h": "ecacce31",
+      "i": 12,
+      "id": "c565.fast2.upright.sram.async2",
+      "m": {
+        "max": 103718,
+        "mean": 103639.7,
+        "med": 103629,
+        "min": 103567,
+        "n": 15,
+        "reps": 24,
+        "sd": 41.0
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.15
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 6451266,
+        "ns_px": 477.45
+      },
+      "g": "cube",
+      "h": "70889db9",
+      "i": 13,
+      "id": "c565.fast2.rotcw.psram.sync",
+      "m": {
+        "max": 96864,
+        "mean": 96770.2,
+        "med": 96769,
+        "min": 96728,
+        "n": 15,
+        "reps": 15,
+        "sd": 31.1
+      },
+      "q": {
+        "cv": 0.03,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.14
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4688300,
+        "ns_px": 346.97
+      },
+      "g": "cube",
+      "h": "70889db9",
+      "i": 14,
+      "id": "c565.fast2.rotcw.psram.async2",
+      "m": {
+        "max": 93969,
+        "mean": 93781.1,
+        "med": 93766,
+        "min": 93619,
+        "n": 15,
+        "reps": 20,
+        "sd": 82.4
+      },
+      "q": {
+        "cv": 0.09,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.37
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 6414941,
+        "ns_px": 474.76
+      },
+      "g": "cube",
+      "h": "70889db9",
+      "i": 15,
+      "id": "c565.fast2.rotcw.sram.sync",
+      "m": {
+        "max": 109089,
+        "mean": 109057.0,
+        "med": 109054,
+        "min": 109043,
+        "n": 15,
+        "reps": 17,
+        "sd": 12.6
+      },
+      "q": {
+        "cv": 0.01,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.04
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4564043,
+        "ns_px": 337.78
+      },
+      "g": "cube",
+      "h": "70889db9",
+      "i": 16,
+      "id": "c565.fast2.rotcw.sram.async2",
+      "m": {
+        "max": 105090,
+        "mean": 104944.7,
+        "med": 104973,
+        "min": 104798,
+        "n": 15,
+        "reps": 23,
+        "sd": 85.2
+      },
+      "q": {
+        "cv": 0.08,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.28
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "sync",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 136238000,
+        "ns_px": 7567.94
+      },
+      "g": "cube",
+      "h": "f8db19ed",
+      "i": 17,
+      "id": "c565.shader.upright.psram.sync",
+      "m": {
+        "max": 136363,
+        "mean": 136227.3,
+        "med": 136238,
+        "min": 136076,
+        "n": 12,
+        "reps": 1,
+        "sd": 90.1
+      },
+      "q": {
+        "cv": 0.07,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.21
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 68865000,
+        "ns_px": 3825.41
+      },
+      "g": "cube",
+      "h": "f8db19ed",
+      "i": 18,
+      "id": "c565.shader.upright.psram.async2",
+      "m": {
+        "max": 137799,
+        "mean": 137733.8,
+        "med": 137730,
+        "min": 137690,
+        "n": 12,
+        "reps": 2,
+        "sd": 29.6
+      },
+      "q": {
+        "cv": 0.02,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.08
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "sync",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 136259000,
+        "ns_px": 7569.1
+      },
+      "g": "cube",
+      "h": "f8db19ed",
+      "i": 19,
+      "id": "c565.shader.upright.sram.sync",
+      "m": {
+        "max": 136381,
+        "mean": 136247.5,
+        "med": 136259,
+        "min": 136154,
+        "n": 12,
+        "reps": 1,
+        "sd": 67.1
+      },
+      "q": {
+        "cv": 0.05,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.17
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 68842500,
+        "ns_px": 3824.16
+      },
+      "g": "cube",
+      "h": "f8db19ed",
+      "i": 20,
+      "id": "c565.shader.upright.sram.async2",
+      "m": {
+        "max": 137740,
+        "mean": 137673.1,
+        "med": 137685,
+        "min": 137603,
+        "n": 12,
+        "reps": 2,
+        "sd": 39.7
+      },
+      "q": {
+        "cv": 0.03,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.1
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "sync",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 129511000,
+        "ns_px": 7194.26
+      },
+      "g": "cube",
+      "h": "796ae951",
+      "i": 21,
+      "id": "c565.shader.rotcw.psram.sync",
+      "m": {
+        "max": 129570,
+        "mean": 129498.4,
+        "med": 129511,
+        "min": 129431,
+        "n": 13,
+        "reps": 1,
+        "sd": 50.1
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.11
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 68380000,
+        "ns_px": 3798.47
+      },
+      "g": "cube",
+      "h": "796ae951",
+      "i": 22,
+      "id": "c565.shader.rotcw.psram.async2",
+      "m": {
+        "max": 136832,
+        "mean": 136752.1,
+        "med": 136760,
+        "min": 136692,
+        "n": 12,
+        "reps": 2,
+        "sd": 40.9
+      },
+      "q": {
+        "cv": 0.03,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.1
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "sync",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 129241000,
+        "ns_px": 7179.26
+      },
+      "g": "cube",
+      "h": "796ae951",
+      "i": 23,
+      "id": "c565.shader.rotcw.sram.sync",
+      "m": {
+        "max": 129264,
+        "mean": 129244.8,
+        "med": 129241,
+        "min": 129223,
+        "n": 13,
+        "reps": 1,
+        "sd": 11.7
+      },
+      "q": {
+        "cv": 0.01,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.03
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "565",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 68033500,
+        "ns_px": 3779.22
+      },
+      "g": "cube",
+      "h": "796ae951",
+      "i": 24,
+      "id": "c565.shader.rotcw.sram.async2",
+      "m": {
+        "max": 136200,
+        "mean": 136073.2,
+        "med": 136067,
+        "min": 136015,
+        "n": 12,
+        "reps": 2,
+        "sd": 47.9
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.14
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 2063219,
+        "ns_px": 203.57
+      },
+      "g": "cube",
+      "h": "601bd481",
+      "i": 25,
+      "id": "c888.fast1.upright.psram.sync",
+      "m": {
+        "max": 84719,
+        "mean": 84503.0,
+        "med": 84592,
+        "min": 84261,
+        "n": 15,
+        "reps": 41,
+        "sd": 199.7
+      },
+      "q": {
+        "cv": 0.24,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.54
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 3702444,
+        "ns_px": 365.31
+      },
+      "g": "cube",
+      "h": "601bd481",
+      "i": 26,
+      "id": "c888.fast1.upright.psram.async2",
+      "m": {
+        "max": 100191,
+        "mean": 99982.1,
+        "med": 99966,
+        "min": 99859,
+        "n": 15,
+        "reps": 27,
+        "sd": 75.2
+      },
+      "q": {
+        "cv": 0.08,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.33
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 2061897,
+        "ns_px": 203.44
+      },
+      "g": "cube",
+      "h": "601bd481",
+      "i": 27,
+      "id": "c888.fast1.upright.sram.sync",
+      "m": {
+        "max": 101242,
+        "mean": 101045.1,
+        "med": 101033,
+        "min": 100889,
+        "n": 15,
+        "reps": 49,
+        "sd": 84.7
+      },
+      "q": {
+        "cv": 0.08,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.35
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 3706033,
+        "ns_px": 365.67
+      },
+      "g": "cube",
+      "h": "601bd481",
+      "i": 28,
+      "id": "c888.fast1.upright.sram.async2",
+      "m": {
+        "max": 111356,
+        "mean": 111156.6,
+        "med": 111181,
+        "min": 110967,
+        "n": 15,
+        "reps": 30,
+        "sd": 92.7
+      },
+      "q": {
+        "cv": 0.08,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.35
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 2341200,
+        "ns_px": 231.0
+      },
+      "g": "cube",
+      "h": "333c04c9",
+      "i": 29,
+      "id": "c888.fast1.rotcw.psram.sync",
+      "m": {
+        "max": 82280,
+        "mean": 81978.5,
+        "med": 81942,
+        "min": 81835,
+        "n": 15,
+        "reps": 35,
+        "sd": 101.6
+      },
+      "q": {
+        "cv": 0.12,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.54
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 4039440,
+        "ns_px": 398.56
+      },
+      "g": "cube",
+      "h": "333c04c9",
+      "i": 30,
+      "id": "c888.fast1.rotcw.psram.async2",
+      "m": {
+        "max": 101143,
+        "mean": 100956.7,
+        "med": 100986,
+        "min": 100708,
+        "n": 15,
+        "reps": 25,
+        "sd": 118.3
+      },
+      "q": {
+        "cv": 0.12,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.43
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 2087229,
+        "ns_px": 205.94
+      },
+      "g": "cube",
+      "h": "333c04c9",
+      "i": 31,
+      "id": "c888.fast1.rotcw.sram.sync",
+      "m": {
+        "max": 100403,
+        "mean": 100216.7,
+        "med": 100187,
+        "min": 100074,
+        "n": 15,
+        "reps": 48,
+        "sd": 99.8
+      },
+      "q": {
+        "cv": 0.1,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.33
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 3789310,
+        "ns_px": 373.88
+      },
+      "g": "cube",
+      "h": "333c04c9",
+      "i": 32,
+      "id": "c888.fast1.rotcw.sram.async2",
+      "m": {
+        "max": 110089,
+        "mean": 109897.1,
+        "med": 109890,
+        "min": 109754,
+        "n": 15,
+        "reps": 29,
+        "sd": 91.2
+      },
+      "q": {
+        "cv": 0.08,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.3
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 6054437,
+        "ns_px": 448.08
+      },
+      "g": "cube",
+      "h": "34ac5a26",
+      "i": 33,
+      "id": "c888.fast2.upright.psram.sync",
+      "m": {
+        "max": 96906,
+        "mean": 96875.9,
+        "med": 96871,
+        "min": 96860,
+        "n": 15,
+        "reps": 16,
+        "sd": 16.0
+      },
+      "q": {
+        "cv": 0.02,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.05
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4171454,
+        "ns_px": 308.72
+      },
+      "g": "cube",
+      "h": "34ac5a26",
+      "i": 34,
+      "id": "c888.fast2.upright.psram.async2",
+      "m": {
+        "max": 91883,
+        "mean": 91776.7,
+        "med": 91772,
+        "min": 91690,
+        "n": 15,
+        "reps": 22,
+        "sd": 46.0
+      },
+      "q": {
+        "cv": 0.05,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.21
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 6055777,
+        "ns_px": 448.18
+      },
+      "g": "cube",
+      "h": "34ac5a26",
+      "i": 35,
+      "id": "c888.fast2.upright.sram.sync",
+      "m": {
+        "max": 109059,
+        "mean": 109004.4,
+        "med": 109004,
+        "min": 108980,
+        "n": 15,
+        "reps": 18,
+        "sd": 19.2
+      },
+      "q": {
+        "cv": 0.02,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.07
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4168560,
+        "ns_px": 308.51
+      },
+      "g": "cube",
+      "h": "34ac5a26",
+      "i": 36,
+      "id": "c888.fast2.upright.sram.async2",
+      "m": {
+        "max": 104352,
+        "mean": 104214.0,
+        "med": 104214,
+        "min": 104134,
+        "n": 15,
+        "reps": 25,
+        "sd": 44.5
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.21
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 6363125,
+        "ns_px": 470.92
+      },
+      "g": "cube",
+      "h": "de65743c",
+      "i": 37,
+      "id": "c888.fast2.rotcw.psram.sync",
+      "m": {
+        "max": 101908,
+        "mean": 101825.4,
+        "med": 101810,
+        "min": 101724,
+        "n": 15,
+        "reps": 16,
+        "sd": 57.9
+      },
+      "q": {
+        "cv": 0.06,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.18
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4727500,
+        "ns_px": 349.87
+      },
+      "g": "cube",
+      "h": "de65743c",
+      "i": 38,
+      "id": "c888.fast2.rotcw.psram.async2",
+      "m": {
+        "max": 94885,
+        "mean": 94570.5,
+        "med": 94550,
+        "min": 94332,
+        "n": 15,
+        "reps": 20,
+        "sd": 120.7
+      },
+      "q": {
+        "cv": 0.13,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.58
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "sync",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 6083944,
+        "ns_px": 450.26
+      },
+      "g": "cube",
+      "h": "de65743c",
+      "i": 39,
+      "id": "c888.fast2.rotcw.sram.sync",
+      "m": {
+        "max": 109568,
+        "mean": 109515.9,
+        "med": 109511,
+        "min": 109502,
+        "n": 15,
+        "reps": 18,
+        "sd": 15.5
+      },
+      "q": {
+        "cv": 0.01,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.06
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4410208,
+        "ns_px": 326.39
+      },
+      "g": "cube",
+      "h": "de65743c",
+      "i": 40,
+      "id": "c888.fast2.rotcw.sram.async2",
+      "m": {
+        "max": 105950,
+        "mean": 105844.4,
+        "med": 105845,
+        "min": 105780,
+        "n": 15,
+        "reps": 24,
+        "sd": 45.5
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.16
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "sync",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 133388000,
+        "ns_px": 7409.62
+      },
+      "g": "cube",
+      "h": "839de335",
+      "i": 41,
+      "id": "c888.shader.upright.psram.sync",
+      "m": {
+        "max": 133495,
+        "mean": 133388.7,
+        "med": 133388,
+        "min": 133281,
+        "n": 12,
+        "reps": 1,
+        "sd": 67.6
+      },
+      "q": {
+        "cv": 0.05,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.16
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "upright",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 68560000,
+        "ns_px": 3808.47
+      },
+      "g": "cube",
+      "h": "839de335",
+      "i": 42,
+      "id": "c888.shader.upright.psram.async2",
+      "m": {
+        "max": 137186,
+        "mean": 137121.5,
+        "med": 137120,
+        "min": 137042,
+        "n": 12,
+        "reps": 2,
+        "sd": 43.1
+      },
+      "q": {
+        "cv": 0.03,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.11
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "sync",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 133321000,
+        "ns_px": 7405.9
+      },
+      "g": "cube",
+      "h": "839de335",
+      "i": 43,
+      "id": "c888.shader.upright.sram.sync",
+      "m": {
+        "max": 133385,
+        "mean": 133319.2,
+        "med": 133321,
+        "min": 133253,
+        "n": 12,
+        "reps": 1,
+        "sd": 40.9
+      },
+      "q": {
+        "cv": 0.03,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.1
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "upright",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 68532000,
+        "ns_px": 3806.91
+      },
+      "g": "cube",
+      "h": "839de335",
+      "i": 44,
+      "id": "c888.shader.upright.sram.async2",
+      "m": {
+        "max": 137110,
+        "mean": 137048.8,
+        "med": 137064,
+        "min": 136967,
+        "n": 12,
+        "reps": 2,
+        "sd": 38.0
+      },
+      "q": {
+        "cv": 0.03,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.1
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "sync",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 128960000,
+        "ns_px": 7163.65
+      },
+      "g": "cube",
+      "h": "dd1828a1",
+      "i": 45,
+      "id": "c888.shader.rotcw.psram.sync",
+      "m": {
+        "max": 129041,
+        "mean": 128955.5,
+        "med": 128960,
+        "min": 128909,
+        "n": 13,
+        "reps": 1,
+        "sd": 34.1
+      },
+      "q": {
+        "cv": 0.03,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.1
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 68217000,
+        "ns_px": 3789.41
+      },
+      "g": "cube",
+      "h": "dd1828a1",
+      "i": 46,
+      "id": "c888.shader.rotcw.psram.async2",
+      "m": {
+        "max": 136615,
+        "mean": 136442.8,
+        "med": 136434,
+        "min": 136334,
+        "n": 12,
+        "reps": 2,
+        "sd": 85.2
+      },
+      "q": {
+        "cv": 0.06,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.21
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "sync",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 128541000,
+        "ns_px": 7140.37
+      },
+      "g": "cube",
+      "h": "dd1828a1",
+      "i": 47,
+      "id": "c888.shader.rotcw.sram.sync",
+      "m": {
+        "max": 128613,
+        "mean": 128539.9,
+        "med": 128541,
+        "min": 128479,
+        "n": 13,
+        "reps": 1,
+        "sd": 39.4
+      },
+      "q": {
+        "cv": 0.03,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.1
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "sram",
+        "orient": "rotcw",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 67605000,
+        "ns_px": 3755.42
+      },
+      "g": "cube",
+      "h": "dd1828a1",
+      "i": 48,
+      "id": "c888.shader.rotcw.sram.async2",
+      "m": {
+        "max": 135459,
+        "mean": 135244.9,
+        "med": 135210,
+        "min": 135162,
+        "n": 12,
+        "reps": 2,
+        "sd": 88.6
+      },
+      "q": {
+        "cv": 0.07,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.22
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotccw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4671952,
+        "ns_px": 345.76
+      },
+      "g": "orient",
+      "h": "e16cec42",
+      "i": 49,
+      "id": "orient.rotccw",
+      "m": {
+        "max": 98223,
+        "mean": 98082.5,
+        "med": 98111,
+        "min": 97912,
+        "n": 15,
+        "reps": 21,
+        "sd": 95.6
+      },
+      "q": {
+        "cv": 0.1,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.32
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rothalf",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4516190,
+        "ns_px": 334.24
+      },
+      "g": "orient",
+      "h": "a6066584",
+      "i": 50,
+      "id": "orient.rothalf",
+      "m": {
+        "max": 94946,
+        "mean": 94856.1,
+        "med": 94840,
+        "min": 94802,
+        "n": 15,
+        "reps": 21,
+        "sd": 41.7
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.15
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "fliph",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4177727,
+        "ns_px": 309.19
+      },
+      "g": "orient",
+      "h": "abc61a88",
+      "i": 51,
+      "id": "orient.fliph",
+      "m": {
+        "max": 92036,
+        "mean": 91918.8,
+        "med": 91910,
+        "min": 91824,
+        "n": 15,
+        "reps": 22,
+        "sd": 49.0
+      },
+      "q": {
+        "cv": 0.05,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.23
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotccwfliph",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4694850,
+        "ns_px": 347.46
+      },
+      "g": "orient",
+      "h": "5262d8d8",
+      "i": 52,
+      "id": "orient.rotccwfliph",
+      "m": {
+        "max": 94159,
+        "mean": 93931.5,
+        "med": 93897,
+        "min": 93761,
+        "n": 15,
+        "reps": 20,
+        "sd": 98.8
+      },
+      "q": {
+        "cv": 0.11,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.42
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rothalffliph",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4532619,
+        "ns_px": 335.45
+      },
+      "g": "orient",
+      "h": "418c2762",
+      "i": 53,
+      "id": "orient.rothalffliph",
+      "m": {
+        "max": 95249,
+        "mean": 95188.6,
+        "med": 95185,
+        "min": 95116,
+        "n": 15,
+        "reps": 21,
+        "sd": 39.3
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.14
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcwfliph",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4714850,
+        "ns_px": 348.94
+      },
+      "g": "orient",
+      "h": "0e714186",
+      "i": 54,
+      "id": "orient.rotcwfliph",
+      "m": {
+        "max": 94593,
+        "mean": 94286.3,
+        "med": 94297,
+        "min": 94113,
+        "n": 15,
+        "reps": 20,
+        "sd": 122.5
+      },
+      "q": {
+        "cv": 0.13,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.51
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 2.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 2649562,
+        "ns_px": 165.02
+      },
+      "g": "font",
+      "h": "a32b1e1d",
+      "i": 55,
+      "id": "font.sky@18",
+      "m": {
+        "max": 85121,
+        "mean": 84815.5,
+        "med": 84786,
+        "min": 84653,
+        "n": 15,
+        "reps": 32,
+        "sd": 129.1
+      },
+      "q": {
+        "cv": 0.15,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.55
+      },
+      "t": "cell",
+      "w": {
+        "chars": 162,
+        "dest_px": 16056,
+        "glyphs": 148,
+        "rows": 12,
+        "src_px": 4014
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 3.0,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 2301771,
+        "ns_px": 118.35
+      },
+      "g": "font",
+      "h": "4bc0b3f9",
+      "i": 56,
+      "id": "font.sky@27",
+      "m": {
+        "max": 80778,
+        "mean": 80584.6,
+        "med": 80562,
+        "min": 80352,
+        "n": 15,
+        "reps": 35,
+        "sd": 109.7
+      },
+      "q": {
+        "cv": 0.14,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.53
+      },
+      "t": "cell",
+      "w": {
+        "chars": 85,
+        "dest_px": 19449,
+        "glyphs": 80,
+        "rows": 8,
+        "src_px": 2161
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky_mono",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/direct",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 4503000,
+        "ns_px": 191.63
+      },
+      "g": "font",
+      "h": "6335b160",
+      "i": 57,
+      "id": "font.skymono@9",
+      "m": {
+        "max": 99226,
+        "mean": 99056.4,
+        "med": 99066,
+        "min": 98847,
+        "n": 15,
+        "reps": 22,
+        "sd": 101.2
+      },
+      "q": {
+        "cv": 0.1,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.38
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 23499,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 23499
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "shader/pal",
+        "ratio": 1.4444,
+        "rend": "async2",
+        "size": 13.0
+      },
+      "d": {
+        "ns_iter": 56048500,
+        "ns_px": 4473.14
+      },
+      "g": "font",
+      "h": "254ec85e",
+      "i": 58,
+      "id": "font.sky@13",
+      "m": {
+        "max": 112268,
+        "mean": 112108.1,
+        "med": 112097,
+        "min": 112014,
+        "n": 15,
+        "reps": 2,
+        "sd": 65.2
+      },
+      "q": {
+        "cv": 0.06,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.23
+      },
+      "t": "cell",
+      "w": {
+        "chars": 255,
+        "dest_px": 12530,
+        "glyphs": 239,
+        "rows": 17,
+        "src_px": 6321
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 2.0,
+        "rend": "async2",
+        "size": 36.0
+      },
+      "d": {
+        "ns_iter": 4915736,
+        "ns_px": 260.92
+      },
+      "g": "font",
+      "h": "972d0991",
+      "i": 59,
+      "id": "font.saira@36",
+      "m": {
+        "max": 93520,
+        "mean": 93400.1,
+        "med": 93399,
+        "min": 93238,
+        "n": 15,
+        "reps": 19,
+        "sd": 69.4
+      },
+      "q": {
+        "cv": 0.07,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.3
+      },
+      "t": "cell",
+      "w": {
+        "chars": 61,
+        "dest_px": 18840,
+        "glyphs": 56,
+        "rows": 6,
+        "src_px": 4710
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "marker",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 22.0
+      },
+      "d": {
+        "ns_iter": 6973466,
+        "ns_px": 305.22
+      },
+      "g": "font",
+      "h": "59dd778c",
+      "i": 60,
+      "id": "font.marker@22",
+      "m": {
+        "max": 104844,
+        "mean": 104618.8,
+        "med": 104602,
+        "min": 104403,
+        "n": 15,
+        "reps": 15,
+        "sd": 127.8
+      },
+      "q": {
+        "cv": 0.12,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.42
+      },
+      "t": "cell",
+      "w": {
+        "chars": 136,
+        "dest_px": 22847,
+        "glyphs": 125,
+        "rows": 10,
+        "src_px": 22847
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "marker",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "shader/aa",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 33.0
+      },
+      "d": {
+        "ns_iter": 110076000,
+        "ns_px": 3685.42
+      },
+      "g": "font",
+      "h": "aed9f152",
+      "i": 61,
+      "id": "font.marker@33",
+      "m": {
+        "max": 110182,
+        "mean": 110079.1,
+        "med": 110076,
+        "min": 109997,
+        "n": 15,
+        "reps": 1,
+        "sd": 40.7
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.17
+      },
+      "t": "cell",
+      "w": {
+        "chars": 76,
+        "dest_px": 29868,
+        "glyphs": 71,
+        "rows": 7,
+        "src_px": 13008
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_condensed",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 45.0
+      },
+      "d": {
+        "ns_iter": 4772789,
+        "ns_px": 248.1
+      },
+      "g": "font",
+      "h": "7bcb728d",
+      "i": 62,
+      "id": "font.condensed@45",
+      "m": {
+        "max": 90801,
+        "mean": 90686.5,
+        "med": 90683,
+        "min": 90609,
+        "n": 15,
+        "reps": 19,
+        "sd": 48.9
+      },
+      "q": {
+        "cv": 0.05,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.21
+      },
+      "t": "cell",
+      "w": {
+        "chars": 51,
+        "dest_px": 19237,
+        "glyphs": 47,
+        "rows": 5,
+        "src_px": 19237
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular_noaa",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "shader/plain",
+        "ratio": 1.5,
+        "rend": "async2",
+        "size": 27.0
+      },
+      "d": {
+        "ns_iter": 62309000,
+        "ns_px": 3461.23
+      },
+      "g": "font",
+      "h": "9c31759b",
+      "i": 63,
+      "id": "font.saira@27.noaa",
+      "m": {
+        "max": 124732,
+        "mean": 124626.7,
+        "med": 124618,
+        "min": 124527,
+        "n": 13,
+        "reps": 2,
+        "sd": 54.0
+      },
+      "q": {
+        "cv": 0.04,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.16
+      },
+      "t": "cell",
+      "w": {
+        "chars": 100,
+        "dest_px": 18002,
+        "glyphs": 92,
+        "rows": 8,
+        "src_px": 7701
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async1",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 7269214,
+        "ns_px": 537.98
+      },
+      "g": "rend",
+      "h": "de65743c",
+      "i": 64,
+      "id": "rend.async1",
+      "m": {
+        "max": 102119,
+        "mean": 101778.8,
+        "med": 101769,
+        "min": 101592,
+        "n": 15,
+        "reps": 14,
+        "sd": 111.1
+      },
+      "q": {
+        "cv": 0.11,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.52
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 128,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "sky",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 9.0
+      },
+      "d": {
+        "ns_iter": 5578500,
+        "ns_px": 550.42
+      },
+      "g": "alpha",
+      "h": "cc2eccc5",
+      "i": 65,
+      "id": "alpha.fast1.a128",
+      "m": {
+        "max": 100538,
+        "mean": 100371.5,
+        "med": 100413,
+        "min": 100168,
+        "n": 15,
+        "reps": 18,
+        "sd": 115.4
+      },
+      "q": {
+        "cv": 0.11,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.37
+      },
+      "t": "cell",
+      "w": {
+        "chars": 397,
+        "dest_px": 10135,
+        "glyphs": 373,
+        "rows": 23,
+        "src_px": 10135
+      }
+    },
+    {
+      "ax": {
+        "alpha": 128,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4726000,
+        "ns_px": 349.76
+      },
+      "g": "alpha",
+      "h": "012c199d",
+      "i": 66,
+      "id": "alpha.fast2.a128",
+      "m": {
+        "max": 94673,
+        "mean": 94509.7,
+        "med": 94520,
+        "min": 94293,
+        "n": 15,
+        "reps": 20,
+        "sd": 92.8
+      },
+      "q": {
+        "cv": 0.1,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.4
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 1,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 2903967,
+        "ns_px": 395.85
+      },
+      "g": "len",
+      "h": "450061c8",
+      "i": 67,
+      "id": "len.short",
+      "m": {
+        "max": 90159,
+        "mean": 90031.0,
+        "med": 90023,
+        "min": 89960,
+        "n": 15,
+        "reps": 31,
+        "sd": 50.5
+      },
+      "q": {
+        "cv": 0.06,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.22
+      },
+      "t": "cell",
+      "w": {
+        "chars": 83,
+        "dest_px": 7336,
+        "glyphs": 82,
+        "rows": 12,
+        "src_px": 7336
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 2,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 7639428,
+        "ns_px": 344.03
+      },
+      "g": "len",
+      "h": "504a97ad",
+      "i": 68,
+      "id": "len.long",
+      "m": {
+        "max": 107354,
+        "mean": 106979.8,
+        "med": 106952,
+        "min": 106752,
+        "n": 15,
+        "reps": 14,
+        "sd": 160.3
+      },
+      "q": {
+        "cv": 0.15,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.56
+      },
+      "t": "cell",
+      "w": {
+        "chars": 315,
+        "dest_px": 22206,
+        "glyphs": 273,
+        "rows": 12,
+        "src_px": 22206
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 1,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4758050,
+        "ns_px": 352.14
+      },
+      "g": "align",
+      "h": "4f91d280",
+      "i": 69,
+      "id": "align.center",
+      "m": {
+        "max": 95416,
+        "mean": 95195.1,
+        "med": 95161,
+        "min": 95013,
+        "n": 15,
+        "reps": 20,
+        "sd": 107.3
+      },
+      "q": {
+        "cv": 0.11,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.42
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    },
+    {
+      "ax": {
+        "alpha": 255,
+        "corpus": 0,
+        "fmt": "888",
+        "font": "saira_regular",
+        "halign": 0,
+        "mem": "psram",
+        "orient": "rotcw",
+        "path": "blit/alpha",
+        "ratio": 1.0,
+        "rend": "async2",
+        "size": 18.0
+      },
+      "d": {
+        "ns_iter": 4726100,
+        "ns_px": 349.77
+      },
+      "g": "drift",
+      "h": "de65743c",
+      "i": 70,
+      "id": "drift.last",
+      "m": {
+        "max": 94696,
+        "mean": 94528.3,
+        "med": 94522,
+        "min": 94375,
+        "n": 15,
+        "reps": 20,
+        "sd": 84.1
+      },
+      "q": {
+        "cv": 0.09,
+        "flags": [],
+        "mhz": 360.0,
+        "outliers": 0,
+        "spread": 0.34
+      },
+      "t": "cell",
+      "w": {
+        "chars": 175,
+        "dest_px": 13512,
+        "glyphs": 161,
+        "rows": 12,
+        "src_px": 13512
+      }
+    }
+  ],
+  "end": {
+    "cells": 71,
+    "status": "ok",
+    "t": "end",
+    "total_us": 117900827
+  },
+  "host": {
+    "app_dirty": true,
+    "app_git": "058fa78daccb",
+    "captured_at": "2026-08-20T10:04:03.404714+00:00",
+    "corrupt_lines": 0,
+    "git_matches_firmware": true,
+    "pax_dirty": false,
+    "pax_git": "964533a6d894",
+    "port": "rfc2217://localhost:4001",
+    "records": 144
+  },
+  "meta": {
+    "bench": {
+      "cell_budget_us": 2000000,
+      "corpus_ver": 1,
+      "driver_core": 0,
+      "driver_prio": 5,
+      "join_placement": "per_sample",
+      "n_samples": 15,
+      "scrub_bytes": 524288,
+      "target_sample_us": 110000,
+      "warmup": 2
+    },
+    "boot_us": 6577702,
+    "build": {
+      "app_branch": "main",
+      "app_date": "Aug 20 2026 11:25:12",
+      "app_dirty": false,
+      "app_git": "058fa78daccb",
+      "app_ver": "058fa78",
+      "idf": "v6.0.2",
+      "opt": "Os",
+      "pax_branch": "main",
+      "pax_dirty": false,
+      "pax_git": "964533a6d894"
+    },
+    "cells": 71,
+    "cfg": {
+      "pax": {
+        "async": "multithread",
+        "bounds_check": false,
+        "fixed_point": true,
+        "long_fixed_point": true,
+        "orientation": true,
+        "queue_size": 32,
+        "range_merger": true,
+        "range_setter": true,
+        "sso_len": 32
+      },
+      "pm_enable": true,
+      "pm_lock": true,
+      "tick_hz": 100,
+      "wdt": false
+    },
+    "hw": {
+      "chip": "esp32p4",
+      "cores": 2,
+      "cpu_mhz_meas": 360.0,
+      "cpu_mhz_nom": 360,
+      "l2_kb": 128,
+      "l2_line": 64,
+      "psram": true,
+      "rev": 103
+    },
+    "mem": {
+      "int_addr": "0x4ff40700",
+      "int_free": 339635,
+      "int_largest": 192512,
+      "psram_addr": "0x4811a900",
+      "psram_free": 30524228,
+      "tile_dim": 256
+    },
+    "reset": 3,
+    "schema": 1,
+    "t": "begin"
+  },
+  "runid": "20260820-100403-repeat3-Os-964533a6",
+  "schema": 1,
+  "status": "ok"
+}

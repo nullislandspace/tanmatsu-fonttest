@@ -52,6 +52,72 @@ static void blit(void) {
     }
 }
 
+// The benchmark is driven entirely from the debug console, so the panel exists
+// only to say what the badge is doing and how to get out of it. Nothing here
+// runs during a measurement: the runner draws into its own off-screen tiles and
+// never touches the display.
+static void display_status(void) {
+    if (pax_buf_get_width(&fb) <= 0) {
+        ESP_LOGI(TAG, "PAX font benchmark ready, %u cells", bench_cell_count());
+        return;
+    }
+
+    char line[64];
+    snprintf(line, sizeof(line), "%u cells, waiting for BENCHRUN", bench_cell_count());
+
+    pax_background(&fb, BLACK);
+    pax_draw_text(&fb, WHITE, pax_font_sky_mono, 20, 0, 0, "PAX font rendering benchmark");
+    pax_draw_text(&fb, WHITE, pax_font_sky_mono, 16, 0, 28, line);
+    pax_draw_text(&fb, WHITE, pax_font_sky_mono, 16, 0, 50, "Host: make testrun");
+    pax_draw_text(&fb, WHITE, pax_font_sky_mono, 16, 0, 72, "F1 or EXIT: back to launcher");
+    blit();
+}
+
+// RENDERDEMO: every built-in font at an integer and a fractional scale, drawn to
+// the real panel. Not a measurement -- this exists so a human can look at the
+// badge after a risky optimization and see that text still renders as text,
+// which is the one failure mode a framebuffer diff cannot flag (every cell wrong
+// in the same way looks self-consistent).
+static void render_demo(void) {
+    if (pax_buf_get_width(&fb) <= 0) {
+        ESP_LOGW(TAG, "No display buffer for RENDERDEMO");
+        return;
+    }
+
+    static struct {
+        pax_font_t const* font;
+        char const*       name;
+    } const FONTS[] = {
+        {pax_font_sky,             "sky"            },
+        {pax_font_sky_mono,        "sky_mono"       },
+        {pax_font_saira_regular,   "saira_regular"  },
+        {pax_font_saira_condensed, "saira_condensed"},
+        {pax_font_marker,          "marker"         },
+    };
+
+    pax_background(&fb, BLACK);
+    float y = 0;
+    for (size_t i = 0; i < sizeof(FONTS) / sizeof(FONTS[0]); i++) {
+        pax_font_t const* font = FONTS[i].font;
+        char              line[96];
+
+        // Integer scale takes the blit fast paths, the 1.5x below takes the
+        // shader rasteriser: both are on screen at once, so a change that only
+        // breaks one of them is still visible.
+        snprintf(line, sizeof(line), "%s 1x: Sphinx of black quartz, judge my vow. 0123456789",
+                 FONTS[i].name);
+        pax_draw_text(&fb, WHITE, font, font->default_size, 0, y, line);
+        y += font->default_size + 4;
+
+        snprintf(line, sizeof(line), "%s 1.5x: Sphinx of black quartz, judge my vow.", FONTS[i].name);
+        pax_draw_text(&fb, WHITE, font, font->default_size * 1.5f, 0, y, line);
+        y += font->default_size * 1.5f + 12;
+    }
+
+    blit();
+    ESP_LOGI(TAG, "RENDERDEMO drawn");
+}
+
 static void display_message(const char* message) {
     if (pax_buf_get_width(&fb) > 0) {
         pax_background(&fb, BLACK);
@@ -227,6 +293,7 @@ void app_main(void) {
     // Benchmark harness: the runner waits for a command, the console listener
     // supplies it. Nothing is measured until the host asks for a run.
     bench_runner_start();
+    bench_runner_set_demo(render_demo);
     bench_console_start(bench_runner_command, bench_cell_count());
 
     // Main section of the app
@@ -236,7 +303,7 @@ void app_main(void) {
     // If you want to run something at an interval in this same main thread you can replace portMAX_DELAY with an amount
     // of ticks to wait, for example pdMS_TO_TICKS(1000)
 
-    display_message("Welcome! Press any key to trigger an event.");
+    display_status();
 
     while (1) {
         bsp_input_event_t event;

@@ -54,6 +54,11 @@ void bench_matrix_build(void);
 unsigned            bench_matrix_count(void);
 bench_cell_t const* bench_matrix_cell(unsigned index);
 
+// Index of a cell by its stable id, or -1 if there is no such cell. Ids are
+// what results are matched on across runs, so this is how the host names a
+// cell it wants dumped without having to know the matrix order.
+int bench_matrix_find(char const* id);
+
 // Index of the base cell, which the drift group repeats first and last.
 unsigned bench_matrix_base_index(void);
 

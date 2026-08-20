@@ -15,6 +15,9 @@ typedef enum {
     BENCH_CMD_PING,        // liveness probe, answered by the console task itself
     BENCH_CMD_RUN,         // run the full matrix
     BENCH_CMD_RUN_ONE,     // run only the base cell
+    BENCH_CMD_RUN_CELL,    // run one cell or an index range (arg = "N" or "N-M"),
+                           // and stay listening afterwards instead of handing the
+                           // badge back -- this is the loop for chasing one bad cell
     BENCH_CMD_LIST_CELLS,  // emit one CELLDEF record per cell, no measurement
     BENCH_CMD_DUMP_CORPUS, // emit corpus layout and accounting per font cell
     BENCH_CMD_DUMP_FB,     // stream one cell's rendered framebuffer (arg = cell id)

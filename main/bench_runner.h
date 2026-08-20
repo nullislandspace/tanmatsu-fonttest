@@ -24,5 +24,10 @@ unsigned bench_cell_count(void);
 // to the launcher when a full run completes.
 void bench_runner_start(void);
 
+// Draws a sample page to the real display for RENDERDEMO. Registered by the
+// app, since the runner has no business owning the display buffer.
+typedef void (*bench_demo_fn)(void);
+void bench_runner_set_demo(bench_demo_fn fn);
+
 // Console command entry point, passed to bench_console_start().
 void bench_runner_command(bench_cmd_t cmd, char const* arg);

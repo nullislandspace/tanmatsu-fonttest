@@ -95,30 +95,62 @@ static void compute_stats(bench_result_t* out) {
     out->spread_pct = out->med_us > 0 ? ((float)(out->max_us - out->min_us) / out->med_us) * 100.0f : 0.0f;
 }
 
-bool bench_measure_cell(bench_cell_t const* cell, void* tile_internal, void* tile_psram, void* scrub,
-                        bench_result_t* out) {
-    memset(out, 0, sizeof(*out));
-
+// Set up a cell's target buffer exactly as a measurement would. Factored out so
+// the dump path and the measurement path cannot drift apart: a reference
+// framebuffer captured from a differently configured buffer would be worse than
+// no reference at all.
+static bool setup_cell_buffer(bench_cell_t const* cell, void* tile_internal, void* tile_psram, pax_buf_t* buf,
+                              bench_layout_t* layout, size_t* used_bytes) {
     void* mem = cell->mem_internal ? tile_internal : tile_psram;
     if (mem == NULL) {
         return false;
     }
 
-    // Set up the target buffer. pax_buf_init does not clear user-supplied
-    // memory, so the zeroing below is what makes fb_hash deterministic.
-    pax_buf_t buf;
-    pax_buf_init(&buf, mem, BENCH_TILE_DIM, BENCH_TILE_DIM, cell->fmt);
-    pax_buf_reversed(&buf, false);
-    pax_buf_set_orientation(&buf, cell->orient);
-    pax_noclip(&buf);
+    pax_buf_init(buf, mem, BENCH_TILE_DIM, BENCH_TILE_DIM, cell->fmt);
+    pax_buf_reversed(buf, false);
+    pax_buf_set_orientation(buf, cell->orient);
+    pax_noclip(buf);
 
-    size_t const used_bytes = pax_buf_get_size(&buf);
-    memset(mem, 0, used_bytes);
+    *used_bytes = pax_buf_get_size(buf);
+    memset(mem, 0, *used_bytes);
+
+    bench_corpus_layout(layout, cell->font, cell->size, cell->corpus, pax_buf_get_width(buf),
+                        pax_buf_get_height(buf));
+    return true;
+}
+
+bool bench_render_cell_once(bench_cell_t const* cell, void* tile_internal, void* tile_psram, pax_buf_t* buf,
+                            bench_layout_t* layout) {
+    size_t used_bytes = 0;
+    if (!setup_cell_buffer(cell, tile_internal, tile_psram, buf, layout, &used_bytes)) {
+        return false;
+    }
+
+    // Always render through the synchronous engine here. The canary is about
+    // what was drawn, not how fast, and the sync path removes any question of
+    // whether a worker had finished when the bytes were read.
+    select_renderer(BENCH_RENDER_SYNC);
+
+    pax_col_t const color = ((pax_col_t)cell->alpha << 24) | 0x00FFFFFF;
+    run_iteration(cell, buf, layout, color);
+    pax_join();
+    return true;
+}
+
+bool bench_measure_cell(bench_cell_t const* cell, void* tile_internal, void* tile_psram, void* scrub,
+                        bench_result_t* out) {
+    memset(out, 0, sizeof(*out));
+
+    // pax_buf_init does not clear user-supplied memory, so the zeroing inside
+    // the helper is what makes fb_hash deterministic.
+    void*     mem = cell->mem_internal ? tile_internal : tile_psram;
+    pax_buf_t buf;
+    size_t    used_bytes = 0;
+    if (!setup_cell_buffer(cell, tile_internal, tile_psram, &buf, &out->layout, &used_bytes)) {
+        return false;
+    }
 
     select_renderer(cell->renderer);
-
-    bench_corpus_layout(&out->layout, cell->font, cell->size, cell->corpus, pax_buf_get_width(&buf),
-                        pax_buf_get_height(&buf));
     out->path = bench_cell_path(cell);
 
     pax_col_t const color = ((pax_col_t)cell->alpha << 24) | 0x00FFFFFF;

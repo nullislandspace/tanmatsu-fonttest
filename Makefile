@@ -144,6 +144,40 @@ testrun:
 testbaseline:
 	$(MAKE) testrun TESTRUN_LABEL=baseline TESTRUN_ARGS="--set-baseline"
 
+# Capture the reference framebuffers every later run is diffed against. Done
+# once, at baseline time, and committed: a reference captured after an
+# optimization would bless whatever that optimization did.
+.PHONY: testrefs
+testrefs:
+	python3 tools/testrun.py --port "$(PORT)" --out-dir "$(RESULTS_DIR)" \
+		--baseline "$(RESULTS_DIR)/baseline-$(OPT).json" --capture-refs
+
+# Regenerate the reports from what is already in results/, no device needed.
+# Deterministic: running it twice over unchanged inputs rewrites the same bytes.
+.PHONY: testreport
+testreport:
+	python3 tools/bench_report.py --dir "$(RESULTS_DIR)" --progress
+
+# Compare the newest run against the baseline for this optimization level.
+.PHONY: testcompare
+testcompare:
+	python3 tools/bench_report.py --dir "$(RESULTS_DIR)" \
+		--compare "$$(ls -1 $(RESULTS_DIR)/runs/*.json | tail -1)" --progress
+
+# The step-9 gate: three back-to-back runs of the same binary must agree before
+# any optimization number means anything. Relaunches between runs because the
+# app hands the badge back to the launcher when a run ends.
+REPEAT_N ?= 3
+.PHONY: testrepeat
+testrepeat:
+	for i in $$(seq 1 $(REPEAT_N)); do \
+		echo "=== repeatability run $$i/$(REPEAT_N) ==="; \
+		$(MAKE) run OPT=$(OPT) || exit 1; \
+		$(MAKE) testrun OPT=$(OPT) TESTRUN_LABEL=repeat$$i || exit 1; \
+	done
+	python3 tools/bench_report.py --dir "$(RESULTS_DIR)" \
+		--repeatability $$(ls -1 $(RESULTS_DIR)/runs/*repeat*.json | tail -$(REPEAT_N))
+
 # One full cycle at the current OPT level: build, install, launch, measure.
 .PHONY: bench
 bench: build install run

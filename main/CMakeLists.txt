@@ -62,6 +62,7 @@ idf_component_register(
 		"main.c"
 		"bench_console.c"
 		"bench_corpus.c"
+		"bench_dump.c"
 		"bench_matrix.c"
 		"bench_measure.c"
 		"bench_report.c"

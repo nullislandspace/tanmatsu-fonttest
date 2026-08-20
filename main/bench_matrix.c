@@ -307,6 +307,20 @@ bench_cell_t const* bench_matrix_cell(unsigned index) {
     return index < s_count ? &s_cells[index] : NULL;
 }
 
+int bench_matrix_find(char const* id) {
+    bench_matrix_build();
+    if (id == NULL || id[0] == '\0') {
+        return -1;
+    }
+    for (unsigned i = 0; i < bench_matrix_count(); i++) {
+        bench_cell_t const* cell = bench_matrix_cell(i);
+        if (cell != NULL && strcmp(cell->id, id) == 0) {
+            return (int)i;
+        }
+    }
+    return -1;
+}
+
 unsigned bench_matrix_base_index(void) {
     return s_base_index;
 }

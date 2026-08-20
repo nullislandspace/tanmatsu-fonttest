@@ -11,6 +11,7 @@
 #include "esp_cpu.h"
 #include "esp_heap_caps.h"
 #include "esp_idf_version.h"
+#include "esp_system.h"
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
@@ -190,13 +191,17 @@ void bench_report_emitf(char const* kind, char const* fmt, ...) {
 }
 
 static void report_identity(char const* kind, char const* type, uint16_t cells, unsigned idle_left_s) {
+    // reset: esp_reset_reason() from *this* boot. A run that ends without an END
+    // record and comes back with reset != 1 (POWERON) says the firmware died
+    // rather than the link dropping -- the one distinction the console cannot
+    // otherwise make, since a panic that reboots takes its own output with it.
     bench_report_emitf(kind,
                        "{\"t\":\"%s\",\"schema\":%d,\"cells\":%u,\"opt\":\"%s\","
                        "\"app_git\":\"%s\",\"app_dirty\":%s,\"pax_git\":\"%s\",\"pax_dirty\":%s,"
-                       "\"corpus_ver\":%d,\"idle_left_s\":%u}",
+                       "\"corpus_ver\":%d,\"idle_left_s\":%u,\"reset\":%d}",
                        type, BENCH_SCHEMA_VERSION, (unsigned)cells, BENCH_OPT_NAME, BENCH_APP_GIT,
                        BENCH_BOOL(BENCH_APP_DIRTY), BENCH_PAX_GIT, BENCH_BOOL(BENCH_PAX_DIRTY),
-                       BENCH_CORPUS_VERSION, idle_left_s);
+                       BENCH_CORPUS_VERSION, idle_left_s, (int)esp_reset_reason());
 }
 
 void bench_report_ready(uint16_t cells, unsigned idle_left_s) {
@@ -219,7 +224,7 @@ void bench_report_begin(uint16_t cells, float cpu_mhz_meas, void const* tile_int
     // Split across two buffers: the whole record would exceed one line budget
     // otherwise, and the host reassembles by key anyway.
     bench_report_emitf("BEGIN",
-                       "{\"t\":\"begin\",\"schema\":%d,\"cells\":%u,\"boot_us\":%lld,"
+                       "{\"t\":\"begin\",\"schema\":%d,\"cells\":%u,\"boot_us\":%lld,\"reset\":%d,"
                        "\"build\":{\"app_git\":\"%s\",\"app_dirty\":%s,\"app_branch\":\"%s\","
                        "\"pax_git\":\"%s\",\"pax_dirty\":%s,\"pax_branch\":\"%s\","
                        "\"idf\":\"%s\",\"opt\":\"%s\",\"app_ver\":\"%s\",\"app_date\":\"%s %s\"},"
@@ -234,7 +239,8 @@ void bench_report_begin(uint16_t cells, float cpu_mhz_meas, void const* tile_int
                        "\"bench\":{\"n_samples\":%d,\"warmup\":%d,\"target_sample_us\":%d,"
                        "\"cell_budget_us\":%d,\"corpus_ver\":%d,\"join_placement\":\"per_sample\","
                        "\"driver_core\":%d,\"driver_prio\":%d,\"scrub_bytes\":%d}}",
-                       BENCH_SCHEMA_VERSION, (unsigned)cells, (long long)esp_timer_get_time(), BENCH_APP_GIT,
+                       BENCH_SCHEMA_VERSION, (unsigned)cells, (long long)esp_timer_get_time(), (int)esp_reset_reason(),
+                       BENCH_APP_GIT,
                        BENCH_BOOL(BENCH_APP_DIRTY), BENCH_APP_BRANCH, BENCH_PAX_GIT, BENCH_BOOL(BENCH_PAX_DIRTY),
                        BENCH_PAX_BRANCH, IDF_VER, BENCH_OPT_NAME, app ? app->version : "?", app ? app->date : "?",
                        app ? app->time : "?", chip.revision, chip.cores, CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ, cpu_mhz_meas,
