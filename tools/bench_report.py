@@ -267,13 +267,19 @@ def results_table(runs, baselines):
 
 
 def headline_table(run):
-    """Per-path cost of the most recent run, in absolute terms.
+    """Per-path cost, in absolute terms, of the primary series.
 
     The ratio tables say whether a change helped; this one says where the time
-    actually goes, which is what decides what to work on next.
+    actually goes, which is what decides what to work on next. It reads from the
+    -Os baseline when there is one, since -Og is the control and quoting its
+    numbers as the headline would misstate the cost by up to 10%.
     """
     cells = [c for c in run.get("cells", []) if c["g"] == "cube"]
-    lines = ["| Pixel loop | Cells | Median ns/dest px | Min | Max |",
+    build = (run.get("meta", {}) or {}).get("build", {})
+    lines = [f"From `{run.get('runid', '?')}` ({build.get('opt', '?')}, "
+             f"pax `{(build.get('pax_git') or '?')[:12]}`).",
+             "",
+             "| Pixel loop | Cells | Median ns/dest px | Min | Max |",
              "|---|---|---|---|---|"]
     for name, pred in GROUPS[:3]:
         sel = [c for c in cells if pred(c["ax"])]
@@ -391,8 +397,9 @@ def main():
         progress_path = os.path.join(args.dir, "PROGRESS.md")
         text = open(progress_path, encoding="utf-8").read() if os.path.exists(progress_path) else "# Progress\n"
         text = splice(text, "results", results_table(runs, baselines))
-        if runs:
-            text = splice(text, "headline", headline_table(runs[-1]))
+        headline_run = baselines.get("os") or (runs[-1] if runs else None)
+        if headline_run is not None:
+            text = splice(text, "headline", headline_table(headline_run))
         with open(progress_path, "w", encoding="utf-8") as handle:
             handle.write(text)
         print(f"  wrote {progress_path}")

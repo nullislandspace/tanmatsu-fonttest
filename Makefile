@@ -144,6 +144,22 @@ testrun:
 testbaseline:
 	$(MAKE) testrun TESTRUN_LABEL=baseline TESTRUN_ARGS="--set-baseline"
 
+# Accept a changed rendering as the new reference. Never automatic: the manifest
+# keeps the full history, so a later "correct" verdict that rests on this stays
+# visible. Re-capture references afterwards with testrefs.
+.PHONY: testbless
+testbless:
+	@test -n "$(CELLS)" || { echo "usage: make testbless CELLS=id[,id] REASON='why'"; exit 1; }
+	@test -n "$(REASON)" || { echo "usage: make testbless CELLS=id[,id] REASON='why'"; exit 1; }
+	python3 tools/testrun.py --port "$(PORT)" --out-dir "$(RESULTS_DIR)" \
+		--bless "$(CELLS)" --reason "$(REASON)"
+
+# Copy the pax history into this repo, since that checkout is gitignored here
+# and a bare commit hash would otherwise be unresolvable from this repo alone.
+.PHONY: paxlog
+paxlog:
+	tools/paxlog.sh
+
 # Capture the reference framebuffers every later run is diffed against. Done
 # once, at baseline time, and committed: a reference captured after an
 # optimization would bless whatever that optimization did.

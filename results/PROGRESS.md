@@ -25,8 +25,8 @@ prose and the status table are maintained by hand.
 | 7. Full run | done | 71/71 cells, `status=ok`, `corrupt_lines=0`, 117.8 s wall, drift +0.10%, zero flagged cells, 360.00 MHz on every cell |
 | 8. Host tooling | done | `testrun.py` captures; `bench_report.py` compares, gates and regenerates this file |
 | 9. Repeatability gate | **passed** | three back-to-back runs, 71 cells: worst spread 0.47% against a 3% limit, median 0.06%, zero cells over limit |
-| 10. Baseline + reference framebuffers | done | `results/baseline-os.json`, 71 reference PNGs in `results/refs/`, every hash matching its measured cell, four spot-checked by eye |
-| 11+. Optimizations | not started | pax `bench-baseline` tag and `opt/text-rendering` branch not created yet |
+| 10. Baseline + reference framebuffers | done | `baseline-os.json` and `baseline-og.json`, both 71/71 at zero corrupt lines and zero flagged cells; 71 reference PNGs, every hash matching its measured cell, four spot-checked by eye; pax tagged `bench-baseline`, `opt/text-rendering` branched from it |
+| 11+. Optimizations | **ready to start** | everything a result needs to be attributable is in place |
 
 ## Where the time goes
 
@@ -35,11 +35,13 @@ This is the table that decides what to optimize; the ratio tables below only say
 whether a change helped.
 
 <!-- generated: headline -->
+From `20260820-102913-baseline-Os-964533a6` (Os, pax `964533a6d894`).
+
 | Pixel loop | Cells | Median ns/dest px | Min | Max |
 |---|---|---|---|---|
-| fast1 | 16 | 362.4 | 195.6 | 399.3 |
-| fast2 | 16 | 449.4 | 309.3 | 471.8 |
-| shader | 16 | 7,161.9 | 3,756.8 | 7,641.0 |
+| fast1 | 16 | 360.1 | 190.7 | 397.7 |
+| fast2 | 16 | 447.9 | 308.8 | 475.4 |
+| shader | 16 | 7,137.6 | 3,760.2 | 7,490.9 |
 <!-- /generated: headline -->
 
 ## What the first full run says
@@ -82,6 +84,28 @@ and the base cell measured first and last differed by 0.10% — meaning cell
 ordering and thermal drift do not affect results, so per-cell comparison across
 runs is legitimate.
 
+## The -Og control series
+
+`-Og` exists to bound how much of the cost is the compiler rather than the code.
+The answer is: not much.
+
+| Group | -Og vs -Os |
+|---|---|
+| overall | +4.7% |
+| fast1 | +10.6% |
+| fast2 | +5.5% |
+| shader | **-2.1%** |
+
+Two things follow. The entire span between a size-optimized build and a
+debug-optimized one is smaller than the effect the shader path has on a single
+draw, so no amount of compiler flag work addresses what actually makes text
+rendering slow here. And `-Og` being *faster* on the shader path is a loose
+thread worth pulling: whatever `-Os` does there, it is a pessimisation.
+
+Rendering is bit-identical between the two levels on all 71 cells, which is a
+real check on both the harness and PAX's determinism -- the reference PNGs were
+captured from an `-Os` build and every `-Og` cell matched them.
+
 ## What counts as a real win
 
 Two noise floors, and they are an order of magnitude apart:
@@ -103,6 +127,11 @@ example, since it must show up on `fast2` and be silent on `fast1`.
 
 ## Results
 
+One row per run in `results/runs/`. The diagnostic-phase runs that produced the
+findings above were measured on earlier app binaries and are kept in
+`results/runs/pre-baseline/`, out of this table, because the ~1% rebuild noise
+below makes them not directly comparable.
+
 One row per captured run. `Overall` and the per-group columns are geometric
 means of per-cell ratios against the baseline for that optimization level;
 below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
@@ -110,12 +139,8 @@ below 1.0 is faster. `Correct` compares every cell's framebuffer hash.
 <!-- generated: results -->
 | Run | pax commit | Opt | Cells | Overall | fast1 | fast2 | shader | Drift | Correct |
 |---|---|---|---|---|---|---|---|---|---|
-| `20260820-095455-Os-964533a6` | `964533a6d894` | Os | 71 | 0.9977 | 0.9883 | 1.0039 | 0.9965 | +0.10% | ok |
-| `20260820-095933-repeat1-Os-964533a6` | `964533a6d894` | Os | 71 | 0.9976 | 0.9882 | 1.0037 | 0.9965 | +0.09% | ok |
-| `20260820-100147-repeat2-Os-964533a6` | `964533a6d894` | Os | 71 | 0.9977 | 0.9883 | 1.0038 | 0.9966 | +0.07% | ok |
-| `20260820-100403-repeat3-Os-964533a6` | `964533a6d894` | Os | 71 | 0.9976 | 0.9884 | 1.0037 | 0.9965 | +0.04% | ok |
-| `20260820-100823-baseline-Os-964533a6` | `964533a6d894` | Os | 71 | 1.0001 | 1.0014 | 0.9994 | 0.9998 | -0.03% | ok |
-| `20260820-101549-baseline-Os-964533a6` | `964533a6d894` | Os | 71 | 1.0000 | - | - | - | -0.21% | baseline |
+| `20260820-102913-baseline-Os-964533a6` | `964533a6d894` | Os | 71 | 1.0000 | - | - | - | +0.10% | baseline |
+| `20260820-103259-baseline-Og-964533a6` | `964533a6d894` | Og | 71 | 1.0000 | - | - | - | -0.14% | baseline |
 <!-- /generated: results -->
 
 ## Correctness references
